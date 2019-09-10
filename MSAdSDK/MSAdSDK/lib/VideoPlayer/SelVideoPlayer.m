@@ -453,6 +453,7 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
 /** 释放Self */
 - (void)dealloc
 {
+    self.playbackControls.delegate = nil;
     self.playerItem = nil;
     [self.playbackControls _playerCancelAutoHidePlaybackControls];
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
