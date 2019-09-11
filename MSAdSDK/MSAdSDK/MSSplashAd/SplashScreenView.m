@@ -261,9 +261,9 @@
                 [ws showAd];
             }
             
-            if([ws.delegate respondsToSelector:@selector(adSuccessPresentScreen:)]){
-                [ws.delegate adSuccessPresentScreen:ws];
-            }
+//            if([ws.delegate respondsToSelector:@selector(adSuccessPresentScreen:)]){
+//                [ws.delegate adSuccessPresentScreen:ws];
+//            }
             
         } fail:^(NSError *error) {
             if([ws.delegate respondsToSelector:@selector(adFailToPresent:withError:)]){
@@ -292,14 +292,9 @@
         }
         else  if (adType==2) {//插图
             self.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width-ws.adModel.width)/2, ([UIScreen mainScreen].bounds.size.height-ws.adModel.height)/2, ws.adModel.width/2, ws.adModel.height/2);
-            
             ws.player.frame = self.frame;
-            
             ws.countButton.frame = CGRectMake(CGRectGetMaxX(self.frame)-20, ([UIScreen mainScreen].bounds.size.height-ws.adImageView.image.size.height/2)/2-20, 15, 15);
             ws.adLabel.frame  = CGRectMake(self.frame.size.width-40, self.frame.size.height-20, 40, 20) ;
-            
-            
-            
             [ws showAd];
         }
     }
