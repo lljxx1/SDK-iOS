@@ -146,11 +146,22 @@
 
 - (void)pushToAdVC{
     MSWS(ws);
-    
     if([ws.delegate respondsToSelector:@selector(adClicked:)]){
         [ws.delegate adClicked:ws];
     }
-    
+    if (ws.adModel.clickUrl.count>0) {
+        //广告被点击时必须触发上报
+        for (int i=0; i<ws.adModel.clickUrl.count; i++) {
+            NSString *clickUrl = ws.adModel.clickUrl[i];
+            [[MSSDKNetSession wsqflyNetWorkingShare]get:clickUrl param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+                
+            } requestHead:^(id response) {
+                
+            } faile:^(NSError *error) {
+                
+            }];
+        }
+    }
     //点击广告图时，广告图消失，同时像首页发送通知，并把广告页对应的地址传给首页
     [ws dismiss];
     NSInteger openType = ws.adModel.target_type;
@@ -234,6 +245,20 @@
     if (ws.adModel.creative_type == 1) {
         ws.player.hidden = YES;
         [SplashScreenDataManager getAdvertisingImageDataImageWithUrl:imageUrl imgLinkUrl:dUrl success:^(id data) {
+            if (ws.adModel.monitorUrl.count>0) {
+                //广告曝光时必须触发上报
+                for (int i=0; i<ws.adModel.monitorUrl.count; i++) {
+                    NSString *monitorUrl = ws.adModel.monitorUrl[i];
+                    [[MSSDKNetSession wsqflyNetWorkingShare]get:monitorUrl param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+                        
+                    } requestHead:^(id response) {
+                        
+                    } faile:^(NSError *error) {
+                        
+                    }];
+                }
+            
+            }
             ws.adImageView.image = data;
             if (adType==0) {//开屏
                 ws.ADShowTime = ADShowTime;
