@@ -12,16 +12,17 @@
 #import <BUAdSDK/BURewardedVideoModel.h>
 #import "SplashScreenView.h"
 #import "SplashScreenDataManager.h"
-
-@interface MSRewardVideoAd()<GDTRewardedVideoAdDelegate,BURewardedVideoAdDelegate>
+#import <BUAdSDK/BUAdSDKManager.h>
+@interface MSRewardVideoAd()<GDTRewardedVideoAdDelegate,BURewardedVideoAdDelegate,MSAdDelegate>
 @property (nonatomic, strong) GDTRewardVideoAd *rewardVideoAd;
 @property (nonatomic, strong) BURewardedVideoAd *rewardedVideoAd;
-
+@property (strong, nonatomic)SplashScreenView *advertiseView;
 @property (nonatomic, getter=isAdValid, readonly) BOOL adValid;
 @property (nonatomic, assign, readonly) NSInteger expiredTimestamp;
 @property (assign, nonatomic)MSShowType showType;
 @property (nonatomic, strong)UIViewController *currentViewController;
 @property (strong, nonatomic)NSMutableArray *dataArray;
+@property (strong, nonatomic)MSAdModel *msAdModel;
 
 @end
 
@@ -32,7 +33,7 @@
 - (instancetype)initWithCurController:(UIViewController*)controller{
     if(self = [super init]){
         self.currentViewController = controller;
-        self.showType = MSShowTypeGDT;
+        self.showType = MSShowTypeBU;
         //初始化广点通
         [self setGDTAppId:kMSGDTMobSDKAppId placementId:@"8020744212936426"];
         //初始化穿山甲
@@ -52,6 +53,8 @@
     [self.rewardVideoAd loadAd];
 }
 - (void)setBUAppId:(NSString *)BUAppId slotID:(NSString *)slotID{
+    [BUAdSDKManager setAppID:BUAppId];
+
 #warning Every time the data is requested, a new one BURewardedVideoAd needs to be initialized. Duplicate request data by the same full screen video ad is not allowed.
     BURewardedVideoModel *model = [[BURewardedVideoModel alloc] init];
     model.userId = @"123";
@@ -65,13 +68,60 @@
  *  详解：显示广告
  */
 - (void)showAd{
-    if (self.showType == MSShowTypeGDT) {
-        [self.rewardVideoAd showAdFromRootViewController:self.currentViewController];
-    }
-    else if (self.showType == MSShowTypeBU){
-        [self.rewardedVideoAd showAdFromRootViewController:self.currentViewController.navigationController ritScene:BURitSceneType_home_get_bonus ritSceneDescribe:nil];
-    }
+//    if (self.showType == MSShowTypeGDT) {
+//        [self.rewardVideoAd showAdFromRootViewController:self.currentViewController];
+//    }
+//    else if (self.showType == MSShowTypeBU){
+//        [self.rewardedVideoAd showAdFromRootViewController:self.currentViewController.navigationController ritScene:BURitSceneType_custom ritSceneDescribe:nil];
+//    }
+    
+    
+    MSWS(ws);
+    NSMutableDictionary *dict = [MSCommCore publicParams];
+    NSString *BundleId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+    [dict setObject:BundleId forKey:@"app_package"];
+    [dict setObject:[MSAdSDK appId] forKey:@"app_id"];
+    [dict setObject:@"1004462" forKey:@"pid"];
+    __block MSAdModel *model = nil;
+    
+    [[MSSDKNetSession wsqflyNetWorkingShare]get:@"http://123.59.48.113/sdk/req_ad" param:dict maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+        if (response) {
+            model = [MSAdModel provinceWithDictionary:response];
+            model.creative_type = 2;
+            NSLog(@"%@", [NSString stringWithFormat:@"%ld",model.width]);
+            ws.msAdModel = model;
+        }
+    } requestHead:^(id response) {
+        NSLog(@"%@",response);
+        //我们假设一个场景，广告的调用顺序是：1. 广点通；2.穿山甲；3.打底广告；
+        if (model) {
+            if(model.sdk.count>0){
+                for (int i= 0; i<model.sdk.count; i++) {
+                    MSSDKModel *sdkModel = model.sdk[i];
+                    if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"GDT"]) {
+                        [ws setGDTAppId:sdkModel.app_id placementId:sdkModel.pid];
+                        break;
+                    }
+                    //                    else if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"CSJ"]){
+                    //                        [ws setBUAppId:sdkModel.app_id slotID:sdkModel.pid];
+                    //                        break;
+                    //                    }
+                }
+            }
+            else{//如果都没有 广点通和穿山甲的广告 那就显示美数广告
+                ws.advertiseView = [[SplashScreenView alloc] initWithFrame:[UIScreen mainScreen].bounds adType:0];
+                ws.advertiseView.adModel = model;
+                ws.advertiseView.delegate = ws;
+                [self.advertiseView  showSplashScreenWithTime:5 adType:3];
+            }
+        }
+    } faile:^(NSError *error) {
+        
+    }];
+    
+    
 }
+
 
 /**
  *  设置穿山甲方法
@@ -255,4 +305,58 @@
         [self.delegate rewardVideoAdDidPlayFinish:self];
     }
 }
+
+#pragma mark - 这里是美数的回调函数
+/**
+ *  广告成功展示
+ */
+- (void)adSuccessPresentScreen:(SplashScreenView *)splashAd{
+    if([self.delegate respondsToSelector:@selector(rewardVideoAdDidLoad:)]){
+        [self.delegate rewardVideoAdDidLoad:self];
+    }
+    NSLog(@"美数回调成功");
+}
+
+/**
+ *  广告展示失败
+ */
+- (void)adFailToPresent:(SplashScreenView *)splashAd withError:(NSError *)error{
+    if([self.delegate respondsToSelector:@selector(rewardVideoAd:didFailWithError:)]){
+        [self.delegate rewardVideoAd:self didFailWithError:error];
+    }
+    //    [splashAd removeFromSuperview];
+}
+
+/**
+ *  广告点击回调
+ */
+- (void)adClicked:(SplashScreenView *)splashAd{
+    if([self.delegate respondsToSelector:@selector(rewardVideoAdDidClicked:)]){
+        [self.delegate rewardVideoAdDidClicked:self];
+    }
+}
+
+
+
+/**
+ *  广告将要关闭回调
+ */
+- (void)adWillClosed:(SplashScreenView *)splashAd{
+    if([self.delegate respondsToSelector:@selector(rewardVideoAdDidClose:)]){
+        [self.delegate rewardVideoAdDidClose:self];
+    }
+    //    [splashAd removeFromSuperview];
+}
+
+/**
+ *  点击以后全屏广告页已经关闭
+ */
+- (void)adDidDismissFullScreenModal:(SplashScreenView *)splashAd{
+    if([self.delegate respondsToSelector:@selector(rewardVideoAdDidPlayFinish:)]){
+        [self.delegate rewardVideoAdDidPlayFinish:self];
+    }
+    //    [splashAd removeFromSuperview];
+    
+}
+
 @end

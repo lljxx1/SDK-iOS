@@ -22,6 +22,8 @@
 /** 全屏切换按钮点击事件 */
 - (void)fullScreenButtonAction;
 - (void)retryButtonAction;
+//倒计时关闭
+- (void)countButtonAction;
 
 /** 滑杆开始拖动 */
 - (void)videoSliderTouchBegan:(SelVideoSlider *)slider;
@@ -39,7 +41,8 @@
 @end
 
 @interface SelPlaybackControls : UIView
-
+/** 倒计时显示 */
+@property (nonatomic, strong) UIButton *countButton;
 /** 底部控制栏 */
 @property (nonatomic, strong)UIView *bottomControlsBar;
 /** 播放按钮 */

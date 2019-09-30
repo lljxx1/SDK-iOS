@@ -9,7 +9,6 @@
 #import "SelVideoPlayer.h"
 #import <AVFoundation/AVFoundation.h>
 #import "SelPlayerConfiguration.h"
-#import "SelPlaybackControls.h"
 
 /** 播放器的播放状态 */
 typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
@@ -283,7 +282,7 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
 /** 应用进入前台 */
 - (void)appDidEnterPlayground:(NSNotification *)notify
 {
-    
+
 }
 
 /** 视频播放结束事件监听 */
@@ -326,6 +325,30 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
 /** 创建进度监听器 */
 - (void)createTimer {
     __weak typeof(self) weakSelf = self;
+    if(weakSelf.isCountDown){
+        __block NSInteger timeout = 8;
+        // 获取全局子线程队列
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        // 创建timer添加到队列中
+        dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+        // 设置时间间隔
+        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC, 0);
+        // 处理事件block
+        dispatch_source_set_event_handler(timer, ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                timeout--;
+                [weakSelf.playbackControls.countButton setTitle:timeout > 0 ? [NSString stringWithFormat:@"跳过%ld", (long)timeout] : @"关闭" forState:UIControlStateNormal];
+                // 倒计时结束，关闭定时器
+                if (timeout <= 0) {
+                    dispatch_source_cancel(timer);
+                }
+            });
+        });
+        // 定时器
+        dispatch_resume(timer);
+      
+    }
+    
     self.timeObserve = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1, 1) queue:nil usingBlock:^(CMTime time){
         AVPlayerItem *currentItem = weakSelf.playerItem;
         NSArray *loadedRanges = currentItem.seekableTimeRanges;
@@ -334,6 +357,21 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
             CGFloat totalTime = (CGFloat)currentItem.duration.value / currentItem.duration.timescale;
             CGFloat value = CMTimeGetSeconds([currentItem currentTime]) / totalTime;
             [weakSelf.playbackControls _setPlaybackControlsWithPlayTime:currentTime totalTime:totalTime sliderValue:value];
+            NSInteger countTime = (NSInteger)(totalTime-currentTime);
+            if(weakSelf.isCountDown){
+                if (countTime==0) {
+                    [weakSelf.playbackControls _retryButtonShow:YES];
+                }
+            }
+            else{
+                if (countTime==0) {
+                    [weakSelf.playbackControls.countButton setTitle:@"关闭" forState:UIControlStateNormal];
+                    [weakSelf.playbackControls _retryButtonShow:YES];
+                }
+                else{
+                    [weakSelf.playbackControls.countButton setTitle:[NSString stringWithFormat:@"%ld",countTime] forState:UIControlStateNormal];
+                }
+            }
         }
     }];
 }
@@ -495,7 +533,10 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
 /** 控制面板单击事件 */
 - (void)tapGesture
 {
-    [_playbackControls _playerShowOrHidePlaybackControls];
+    if (_delegate && [_delegate respondsToSelector:@selector(tapGesture)]) {
+        [_delegate tapGesture];
+    }
+//    [_playbackControls _playerShowOrHidePlaybackControls];
 }
 
 /** 控制面板双击事件 */
@@ -517,8 +558,17 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
 {
     [_playbackControls _retryButtonShow:NO];
     [_playbackControls _activityIndicatorViewShow:YES];
-    [self _setupPlayer];
+//    [self _setupPlayer];
+    /** 创建进度监听器 */
+    [self createTimer];
     [self _playVideo];
+}
+
+//倒计时关闭
+- (void)countButtonAction{
+    if (_delegate && [_delegate respondsToSelector:@selector(countButtonAction)]) {
+        [_delegate countButtonAction];
+    }
 }
 
 #pragma mark 滑杆拖动代理

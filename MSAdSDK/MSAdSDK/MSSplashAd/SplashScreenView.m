@@ -13,11 +13,12 @@
 #import "SplashScreenDataManager.h"
 #import "SelVideoPlayer.h"
 #import "SelPlayerConfiguration.h"
-@interface  SplashScreenView()<SKStoreProductViewControllerDelegate>
+@interface  SplashScreenView()<SKStoreProductViewControllerDelegate,SelVideoPlayerDelegate>
 
 @property (nonatomic, strong) UIView *bgView;
 
 @property (nonatomic, strong) UIButton *countButton;
+
 //视频播放
 @property (nonatomic, strong) SelVideoPlayer*player;
 
@@ -30,18 +31,14 @@
 
 @property (nonatomic, assign) NSInteger count;
 
+@property (nonatomic, assign) NSInteger msAdType;
+
+
 @end
  
 
 @implementation SplashScreenView
 
-- (NSTimer *)countTimer
-{
-    if (!_countTimer) {
-        _countTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
-    }
-    return _countTimer;
-}
 
 - (instancetype)initWithFrame:(CGRect)frame adType:(NSInteger)adType
 {
@@ -74,11 +71,9 @@
     [_adImageView addGestureRecognizer:tap];
     
     // 2.跳过按钮
-    _countButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    _countButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _countButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 84, 60, 60, 30);
     [_countButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-//    _countButton.backgroundColor = [UIColor redColor];
-
     
     UILabel *label = [[UILabel alloc] init];
     label.backgroundColor = MSUIColorFromRGB(0x55555);
@@ -101,8 +96,8 @@
     self.configuration = configuration;
     
     _player = [[SelVideoPlayer alloc]initWithFrame:self.frame];
-    
-    self.player.backgroundColor = [UIColor redColor];
+    _player.delegate = self;
+//    self.player.backgroundColor = [UIColor redColor];
     //0是开屏 1是banner  2s插屏
     if (adType==0) {
         _adImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -188,7 +183,7 @@
         //1:导入StoreKit.framework,控制器里面添加框架#import <StoreKit/StoreKit.h>
         //2:实现代理SKStoreProductViewControllerDelegate
         SKStoreProductViewController *storeProductViewContorller = [[SKStoreProductViewController alloc] init];
-        storeProductViewContorller.delegate = self;
+        storeProductViewContorller.delegate = ws;
         //        ViewController *viewc = [[ViewController alloc]init];
         //        __weak typeof(viewc) weakViewController = viewc;
         
@@ -201,7 +196,7 @@
                  NSLog(@"错误%@",error);
              }else{
                  //AS应用界面
-                 [self.currentViewController presentViewController:storeProductViewContorller animated:YES completion:^(){
+                 [ws.currentViewController presentViewController:storeProductViewContorller animated:YES completion:^(){
                      if([ws.delegate respondsToSelector:@selector(bannerViewDidPresentFullScreenModal)]){
                          [ws.delegate bannerViewDidPresentFullScreenModal];
                      }
@@ -221,16 +216,18 @@
 {
     MSWS(ws);
     ws.count --;
+//    dispatch_async(dispatch_get_main_queue(), ^{
     [ws.countButton setTitle:[NSString stringWithFormat:@"跳过 %ld",(long)ws.count] forState:UIControlStateNormal];
-    if (ws.count == 0) {
-        
-        [ws dismiss];
-    }
+        if (ws.count == 0) {
+            [ws dismiss];
+        }
+//    });
 }
 
 - (void)showSplashScreenWithTime:(NSInteger)ADShowTime adType:(NSInteger)adType
 {
     MSWS(ws);
+    ws.msAdType = adType;
     NSString *imageUrl = @"";
     NSString *dUrl = @"";
 
@@ -274,15 +271,12 @@
                 
             }
             else  if (adType==2) {//插图
-                self.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width-ws.adImageView.image.size.width/2)/2, ([UIScreen mainScreen].bounds.size.height-ws.adImageView.image.size.height/2)/2, ws.adImageView.image.size.width/2, ws.adImageView.image.size.height/2);
+                ws.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width-ws.adImageView.image.size.width/2)/2, ([UIScreen mainScreen].bounds.size.height-ws.adImageView.image.size.height/2)/2, ws.adImageView.image.size.width/2, ws.adImageView.image.size.height/2);
                 
                 ws.adImageView.frame = CGRectMake(0, 0, ws.adImageView.image.size.width/2, ws.adImageView.image.size.height/2);
                 
-                ws.countButton.frame = CGRectMake(CGRectGetMaxX(self.frame)-20, ([UIScreen mainScreen].bounds.size.height-ws.adImageView.image.size.height/2)/2-20, 15, 15);
-                ws.adLabel.frame  = CGRectMake(self.frame.size.width-40, self.frame.size.height-20, 40, 20) ;
-                
-                
-                
+                ws.countButton.frame = CGRectMake(CGRectGetMaxX(ws.frame)-20, ([UIScreen mainScreen].bounds.size.height-ws.adImageView.image.size.height/2)/2-20, 15, 15);
+                ws.adLabel.frame  = CGRectMake(ws.frame.size.width-40, ws.frame.size.height-20, 40, 20) ;
                 [ws showAd];
             }
             
@@ -299,14 +293,14 @@
     //播放的是视频
     else if (ws.adModel.creative_type == 2){
         ws.adImageView.hidden = YES;
-        
-        self.configuration.sourceUrl = [NSURL URLWithString:@"http://sc.ghssad.com/sources/s/2019030416/174/5c7ce11ac4103.mp4"];
-        ws.player.playerConfiguration = self.configuration;
+        ws.countButton.hidden = YES;
+        ws.configuration.sourceUrl = [NSURL URLWithString:@"http://sc.ghssad.com/sources/s/2019030416/174/5c7ce11ac4103.mp4"];
+      
         
         if (adType==0) {//开屏
-            ws.ADShowTime = ADShowTime;
-            [ws.countButton setTitle:[NSString stringWithFormat:@"跳过%ld",ADShowTime] forState:UIControlStateNormal];
-            [ws startTimer];
+            ws.player.isCountDown = YES;
+            ws.player.playerConfiguration = ws.configuration;
+            
             UIWindow *window = [[UIApplication sharedApplication].delegate window];
             window.hidden = NO;
             [window addSubview:ws];
@@ -316,11 +310,18 @@
             
         }
         else  if (adType==2) {//插图
-            self.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width-ws.adModel.width)/2, ([UIScreen mainScreen].bounds.size.height-ws.adModel.height)/2, ws.adModel.width/2, ws.adModel.height/2);
-            ws.player.frame = self.frame;
-            ws.countButton.frame = CGRectMake(CGRectGetMaxX(self.frame)-20, ([UIScreen mainScreen].bounds.size.height-ws.adImageView.image.size.height/2)/2-20, 15, 15);
-            ws.adLabel.frame  = CGRectMake(self.frame.size.width-40, self.frame.size.height-20, 40, 20) ;
+            ws.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width-ws.adModel.width)/2, ([UIScreen mainScreen].bounds.size.height-ws.adModel.height)/2, ws.adModel.width/2, ws.adModel.height/2);
+            ws.player.frame = ws.frame;
+            ws.countButton.frame = CGRectMake(CGRectGetMaxX(ws.frame)-20, ([UIScreen mainScreen].bounds.size.height-ws.adImageView.image.size.height/2)/2-20, 15, 15);
+            ws.adLabel.frame  = CGRectMake(ws.frame.size.width-40, ws.frame.size.height-20, 40, 20) ;
             [ws showAd];
+        }
+        else if (adType == 3){
+            ws.player.playerConfiguration = ws.configuration;
+            UIWindow *window = [[UIApplication sharedApplication].delegate window];
+            window.hidden = NO;
+            [window addSubview:ws];
+            
         }
     }
 }
@@ -350,9 +351,21 @@
 - (void)startTimeroOnMainThread{
     MSWS(ws);
     ws.count = ws.ADShowTime;
-    [[NSRunLoop currentRunLoop] addTimer:ws.countTimer forMode:NSRunLoopCommonModes];
+    ws.countTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
+//    [[NSRunLoop currentRunLoop] addTimer:ws.countTimer forMode:NSDefaultRunLoopMode];
 }
 
+//倒计时关闭
+- (void)countButtonAction{
+//    if(self.msAdType == 0||self.msAdType == 3){
+        [self dismiss];
+//    }
+}
+
+//控制面板单击
+- (void)tapGesture{
+    [self pushToAdVC];
+}
 
 
 // 移除广告页面
@@ -376,12 +389,17 @@
         if([ws.delegate respondsToSelector:@selector(adClosed:)]){
             [ws.delegate adClosed:ws];
         }
-        [self removeFromSuperview];
-        [self.bgView removeFromSuperview];
-        [self.countButton removeFromSuperview];
+        
+        
+        [ws removeFromSuperview];
+        [ws.bgView removeFromSuperview];
+        [ws.countButton removeFromSuperview];
     }];
     
 }
 
+- (void)dealloc{
+    NSLog(@"视图销毁");
+}
 
 @end

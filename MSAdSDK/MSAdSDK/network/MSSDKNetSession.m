@@ -222,21 +222,16 @@
                 NSDictionary *allheadsFiles = da.allHeaderFields;
         
                 NSLog(@"allheadsFiles:%@",allheadsFiles[@"Content-Type"]);
-        
-            
-        
                 //8.解析数据
-        
                 if (!error) {
-            
                         if (responType ==WsqflyNetSessionResponseTypeJSON) {//返回JSON
-                
                                 respone(dict);
-                
-                            }else{
-                                        respone(data);//返回二进制
-                                }
-                    }else{
+                            }
+                        else{
+                                respone(data);//返回二进制
+                            }
+                }
+                else{
                 
                             fail(error);
                 

@@ -20,7 +20,7 @@
 @property (strong, nonatomic)BUSplashAdView *splashView;
 @property (strong, nonatomic)SplashScreenView *advertiseView;
 @property (assign, nonatomic)MSShowType showType;
-@property (strong, nonatomic)NSMutableArray *dataArray;
+@property (strong, nonatomic)MSAdModel *msAdModel;
 @end
 
 @implementation MSSplashAd
@@ -108,69 +108,59 @@
     [dict setObject:[MSAdSDK appId] forKey:@"app_id"];
     [dict setObject:@"1004462" forKey:@"pid"];
     __block MSAdModel *model = nil;
-    ws.dataArray = [NSMutableArray array];
 
     [[MSSDKNetSession wsqflyNetWorkingShare]get:@"http://123.59.48.113/sdk/req_ad" param:dict maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
         if (response) {
-            if ([response isKindOfClass:[NSArray class]]) {
-                for (NSDictionary *dict in response) {
-                    if (dict) {
-                        MSSDKModel *sdkModel = [MSSDKModel provinceWithDictionary:dict];
-                        [ws.dataArray addObject:sdkModel];
-                    }
-                }
-            }
-            else{
-                model = [MSAdModel provinceWithDictionary:response];
-//                model.creative_type = 2;
-                NSLog(@"%@", [NSString stringWithFormat:@"%ld",model.width]);
-            }
+            model = [MSAdModel provinceWithDictionary:response];
+//            model.creative_type = 2;
+            NSLog(@"%@", [NSString stringWithFormat:@"%ld",model.width]);
+            ws.msAdModel = model;
         }
     } requestHead:^(id response) {
         NSLog(@"%@",response);
-        if ([response[@"Response_type"] isEqualToString:@"API"]) {
-            ws.advertiseView = [[SplashScreenView alloc] initWithFrame:[UIScreen mainScreen].bounds adType:0];
-            ws.advertiseView.adModel = model;
-            ws.advertiseView.delegate = ws;
-            [self.advertiseView  showSplashScreenWithTime:5 adType:0];
-        }
-        else if ([response[@"Response_type"] isEqualToString:@"SDK"]) {
-            if (ws.dataArray.count>0) {
-                MSSDKModel *sdkModel = ws.dataArray[0];
-                if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"GDT"]) {
-                    [ws setGDTAppId:sdkModel.app_id placementId:sdkModel.pid];
-                }
-                else if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"CSJ"]){
-                    [ws setBUAppId:sdkModel.app_id slotID:sdkModel.pid];
+        //我们假设一个场景，广告的调用顺序是：1. 广点通；2.穿山甲；3.打底广告；
+        if (model) {
+            if(model.sdk.count>0){
+                for (int i= 0; i<model.sdk.count; i++) {
+                    MSSDKModel *sdkModel = model.sdk[i];
+                    if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"GDT"]) {
+                        [ws setGDTAppId:sdkModel.app_id placementId:sdkModel.pid];
+                        break;
+                    }
+//                    else if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"CSJ"]){
+//                        [ws setBUAppId:sdkModel.app_id slotID:sdkModel.pid];
+//                        break;
+//                    }
                 }
             }
+            else{//如果都没有 广点通和穿山甲的广告 那就显示美数广告
+                ws.advertiseView = [[SplashScreenView alloc] initWithFrame:[UIScreen mainScreen].bounds adType:0];
+                ws.advertiseView.adModel = model;
+                ws.advertiseView.delegate = ws;
+                [self.advertiseView  showSplashScreenWithTime:5 adType:0];
+            }
         }
-
     } faile:^(NSError *error) {
         if([ws.delegate respondsToSelector:@selector(splashAdFailToPresent:withError:)]){
             [ws.delegate splashAdFailToPresent:ws withError:error];
             [ws.advertiseView removeFromSuperview];
         }
     }];
-    
-    
-//    //显示广点通
-//    if(self.showType ==MSShowTypeGDT){
-//        [self.splash loadAdAndShowInWindow:window];
-//    }
-//    //显示穿山甲
-//    else if (self.showType == MSShowTypeBU){
-//        [self.splashView loadAdData];
-//        [window.rootViewController.view addSubview:self.splashView];
-//        self.splashView.rootViewController = window.rootViewController;
-//    }
-//    else if (self.showType == MSShowTypeMS){
-//        //        设置广告页显示的时间
-//        [self.advertiseView  showSplashScreenWithTime:5];
-//    }
-
 }
 
+#pragma mark - 美数返回json，处理逻辑如下
+/*
+ 美数返回json，处理逻辑如下：
+1.如果返回的http code是204，则执行 5，否则执行2.
+2.如果返回json中包含sdk字段，则依次调用sdk，如果某个sdk加载到广告，则执行6。如果所有sdk都没有加载到广告，则执行4.
+3.如果返回的json中没有sdk字段，则执行4.
+4.判断 json 返回中是否有广告（可以利用曝光监测字段判断）如果有加载json返回内容中的广告，加载广告成功执行6，否则执行5，如果没有执行 5。
+5.回调开发者代码通知没有加载到广告
+6.结束
+ */
+- (void)showAdType:(NSUInteger)AdType{
+    
+}
 
 #pragma mark - 这里是广点通的回调函数
 /**

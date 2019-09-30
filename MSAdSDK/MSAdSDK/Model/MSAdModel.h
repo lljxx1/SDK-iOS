@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "MSSDKModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MSAdModel : NSObject
@@ -63,6 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic , strong) NSArray <NSString *>              * video_full;
 @property (nonatomic , strong) NSArray <NSString *>              * video_exit_full;
 
+@property (nonatomic , strong) NSArray <MSSDKModel *>              * sdk;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
 

@@ -7,6 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SelPlaybackControls.h"
+
+/** 播放器控制面板代理 */
+@protocol SelVideoPlayerDelegate <NSObject>
+
+@required
+//倒计时关闭
+- (void)countButtonAction;
+/** 控制面板单击事件 */
+- (void)tapGesture;
+@end
 
 @class SelPlayerConfiguration;
 @interface SelVideoPlayer : UIView
@@ -18,7 +29,12 @@
 //- (instancetype)initWithFrame:(CGRect)frame configuration:(SelPlayerConfiguration *)configuration;
 
 /** 播放器配置信息 */
+/** 是否是倒计时 */
+@property (nonatomic, assign) BOOL isCountDown;
 @property (nonatomic, strong) SelPlayerConfiguration *playerConfiguration;
+
+@property (nonatomic, weak) id<SelVideoPlayerDelegate> delegate;
+
 /** 播放视频 */
 - (void)_playVideo;
 /** 暂停播放 */

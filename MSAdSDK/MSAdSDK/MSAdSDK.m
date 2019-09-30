@@ -15,6 +15,8 @@ static NSString *const MSAppId = @"MSAppId";
         [[NSUserDefaults standardUserDefaults] setValue:appId forKey:MSAppId];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
+    
+    //同事也初始化
 }
 + (NSString *)appId{
     NSString *appId = [[NSUserDefaults standardUserDefaults] valueForKey:MSAppId];

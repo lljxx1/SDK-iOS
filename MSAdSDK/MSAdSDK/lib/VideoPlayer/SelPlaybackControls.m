@@ -93,6 +93,7 @@ static const CGFloat PlaybackControlsAutoHideTimeInterval = 0.3f;
     {
         self.retryButton.hidden = YES;
     }
+    [self makeConstraints];
 }
 
 /** progress显示缓冲进度 */
@@ -213,7 +214,8 @@ static const CGFloat PlaybackControlsAutoHideTimeInterval = 0.3f;
     [self addSubview:self.bottomControlsBar];
     [self addSubview:self.activityIndicatorView];
     [self addSubview:self.retryButton];
-    
+    [self addSubview:self.countButton];
+
     [_bottomControlsBar addSubview:self.fullScreenButton];
     [_bottomControlsBar addSubview:self.playTimeLabel];
     [_bottomControlsBar addSubview:self.totalTimeLabel];
@@ -267,6 +269,12 @@ static const CGFloat PlaybackControlsAutoHideTimeInterval = 0.3f;
     [_fullScreenButton mas_makeConstraints:^(BWHXMASConstraintMaker *make) {
         make.right.bottom.equalTo(ws.bottomControlsBar);
         make.size.mas_equalTo(CGSizeMake(30, 30));
+    }];
+    
+    [_countButton mas_makeConstraints:^(BWHXMASConstraintMaker *make) {
+        make.top.equalTo(ws.mas_top).offset(40);
+        make.right.equalTo(ws.mas_right).offset(-10);
+        make.size.mas_equalTo(CGSizeMake(60, 40));
     }];
     
     [_playTimeLabel mas_makeConstraints:^(BWHXMASConstraintMaker *make) {
@@ -324,6 +332,17 @@ static const CGFloat PlaybackControlsAutoHideTimeInterval = 0.3f;
     return _playButton;
 }
 
+- (UIButton*)countButton{
+    if (!_countButton) {
+        _countButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//        _countButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 84, 60, 60, 30);
+        [_countButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _countButton;
+   
+}
+
+
 /** 全屏切换按钮 */
 - (UIButton *)fullScreenButton
 {
@@ -370,7 +389,7 @@ static const CGFloat PlaybackControlsAutoHideTimeInterval = 0.3f;
 {
     if (!_retryButton) {
         _retryButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_retryButton setImage:[UIImage imageNamed:@"Action_reload_player_100x100_"] forState:UIControlStateNormal];
+        [_retryButton setImage:[UIImage imageNamed:@"BUAdSDK.bundle/bu_replay"] forState:UIControlStateNormal];
         [_retryButton addTarget:self action:@selector(retryAction) forControlEvents:UIControlEventTouchUpInside];
         _retryButton.hidden = YES;
     }
@@ -464,5 +483,15 @@ static const CGFloat PlaybackControlsAutoHideTimeInterval = 0.3f;
     }
 }
 
+- (void)dismiss//倒计时关闭
+{
+    MSWS(ws);
+    NSRange range = [ws.countButton.titleLabel.text rangeOfString:@"跳过"];
+    if ([ws.countButton.titleLabel.text isEqualToString:@"关闭"]||range.location != NSNotFound) {
+        if (_delegate && [_delegate respondsToSelector:@selector(countButtonAction)]) {
+            [_delegate countButtonAction];
+        }
+    }
+}
 
 @end
