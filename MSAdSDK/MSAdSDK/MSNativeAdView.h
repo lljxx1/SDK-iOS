@@ -10,6 +10,9 @@
 #import "MSAdModel.h"
 #import "MSSDKDefines.h"
 
+typedef void(^RequestMSAdData)(MSAdModel *adModel);                               // 请求头的数据
+
+
 @class MSNativeAdView;
 
 @protocol MSNativeAdDelegate <NSObject>
@@ -58,12 +61,16 @@
 @property (assign, nonatomic)MSNativeAdViewShowType nativeAdViewShowType;
 
 
-@property (assign, nonatomic)MSAdModel *adModel;
+@property (strong, nonatomic)MSAdModel *adModel;
+
++ (void)requestMSAdData:(RequestMSAdData)msAdData;
 
 /**
  *  构造方法
  *  详解：frame - banner 展示的位置和大小
  */
 - (instancetype)initWithFrame:(CGRect)frame curController:(UIViewController*)controller;
+
++ (CGFloat)heightCellForRow:(MSAdModel*)adModel nativeAdViewShowType:(MSNativeAdViewShowType)nativeAdViewShowType;
 
 @end

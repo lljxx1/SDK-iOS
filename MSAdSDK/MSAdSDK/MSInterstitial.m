@@ -20,6 +20,7 @@
 @property (assign, nonatomic)MSShowType showType;
 @property (nonatomic, strong)UIViewController *currentViewController;
 @property (strong, nonatomic)NSMutableArray *dataArray;
+@property (strong, nonatomic)MSAdModel *msAdModel;
 
 @end
 
@@ -57,42 +58,36 @@
         
         [[MSSDKNetSession wsqflyNetWorkingShare]get:@"http://123.59.48.113/sdk/req_ad" param:dict maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
             if (response) {
-                if ([response isKindOfClass:[NSArray class]]) {
-                    for (NSDictionary *dict in response) {
-                        if (dict) {
-                            MSSDKModel *sdkModel = [MSSDKModel provinceWithDictionary:dict];
-                            [ws.dataArray addObject:sdkModel];
-                        }
-                    }
-                }
-                else{
-                    model = [MSAdModel provinceWithDictionary:response];
-                    NSLog(@"%@", [NSString stringWithFormat:@"%ld",model.width]);
-                }
-            }
-   
-            
+                model = [MSAdModel provinceWithDictionary:response];
+                //如果类型是2 说明是调用视频
+                //            model.creative_type = 2;
+                NSLog(@"%@", [NSString stringWithFormat:@"%ld",model.width]);
+                ws.msAdModel = model;
+            }            
         } requestHead:^(id response) {
-            if ([response[@"Response_type"] isEqualToString:@"API"]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    //回调或者说是通知主线程刷新，
-                    ws.advertiseView = [[SplashScreenView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width-200)/2, ([UIScreen mainScreen].bounds.size.height-300)/2, 200, 300) adType:2];
-                    ws.advertiseView.adModel = model;
-                    ws.advertiseView.delegate = ws;
-                    if([self.delegate respondsToSelector:@selector(interstitialSuccessToLoadAd:)]){
-                        [self.delegate interstitialSuccessToLoadAd:self];
-                    }
-                });
-            }
-            else if ([response[@"Response_type"] isEqualToString:@"SDK"]) {
-                if (ws.dataArray.count>0) {
-                    MSSDKModel *sdkModel = ws.dataArray[0];
+            //我们假设一个场景，广告的调用顺序是：1. 广点通；2.穿山甲；3.打底广告；
+            if (model) {
+                if(model.sdk.count>0){
+                    MSSDKModel *sdkModel = model.sdk[0];
+                    //调用广点通SDK
                     if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"GDT"]) {
                         [ws setGDTAppId:sdkModel.app_id placementId:sdkModel.pid];
                     }
+                    //调用穿山甲SDK
                     else if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"CSJ"]){
                         [ws setBUAppId:sdkModel.app_id slotID:sdkModel.pid];
                     }
+                }
+                else{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        //回调或者说是通知主线程刷新，
+                        ws.advertiseView = [[SplashScreenView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width-200)/2, ([UIScreen mainScreen].bounds.size.height-300)/2, 200, 300) adModel:model  adType:2];
+                        ws.advertiseView.adModel = model;
+                        ws.advertiseView.delegate = ws;
+                        if([self.delegate respondsToSelector:@selector(interstitialSuccessToLoadAd:)]){
+                            [self.delegate interstitialSuccessToLoadAd:self];
+                        }
+                    });
                 }
             }
         } faile:^(NSError *error) {
@@ -158,7 +153,7 @@
     MSWS(ws);
     NSString *filePath = [SplashScreenDataManager getFilePathWithImageName:[[NSUserDefaults standardUserDefaults] valueForKey:adImageName]];
     // 图片存在
-    ws.advertiseView = [[SplashScreenView alloc] initWithFrame:frame adType:2];
+    ws.advertiseView = [[SplashScreenView alloc] initWithFrame:frame adModel:ws.msAdModel adType:2];
     ws.advertiseView.currentViewController = ws.currentViewController;
     ws.advertiseView .imgFilePath = filePath;
     ws.advertiseView .imgLinkUrl = [[NSUserDefaults standardUserDefaults] valueForKey:adUrl];
@@ -171,6 +166,8 @@
     }];
 }
 
+
+#pragma mark - 加载广点通sdk
 /**
  *  广告预加载成功回调
  *  详解:当接收服务器返回的广告数据成功且预加载后调用该函数
@@ -194,6 +191,16 @@
  *  详解:当接收服务器返回的广告数据失败后调用该函数
  */
 - (void)interstitialFailToLoadAd:(GDTMobInterstitial *)interstitial error:(NSError *)error{
+    MSWS(ws);
+    if(ws.msAdModel.sdk.count==2){
+        MSSDKModel *sdkModel = ws.msAdModel.sdk[1];
+        //调用穿山甲SDK
+        if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"CSJ"]){
+            [ws setBUAppId:sdkModel.app_id slotID:sdkModel.pid];
+        }
+        return;
+    }
+    
     if([self.delegate respondsToSelector:@selector(interstitialFailToLoadAd:error:)]){
         [self.delegate interstitialFailToLoadAd:self error:error];
     }

@@ -51,39 +51,6 @@
 - (IBAction)clickLoadAd:(id)sender {
     [self clickRemoveAd:nil];
     [self.view addSubview:self.bannerView];
-//    self.bannerView.backgroundColor = [UIColor redColor];
-    //使用 Auto Layout 布局，也可使用 frame 布局。
-//    self.bannerView.translatesAutoresizingMaskIntoConstraints = NO;
-//    [self.view addConstraints:@[
-//                           [NSLayoutConstraint constraintWithItem:self.bannerView
-//                                                        attribute:NSLayoutAttributeTop
-//                                                        relatedBy:NSLayoutRelationEqual
-//                                                           toItem:self.view
-//                                                        attribute:NSLayoutAttributeTop
-//                                                       multiplier:1.0
-//                                                         constant:0],
-//                           [NSLayoutConstraint constraintWithItem:self.bannerView
-//                                                        attribute:NSLayoutAttributeLeading
-//                                                        relatedBy:NSLayoutRelationEqual
-//                                                           toItem:self.view
-//                                                        attribute:NSLayoutAttributeLeading
-//                                                       multiplier:1.0
-//                                                         constant:0],
-//                           [NSLayoutConstraint constraintWithItem:self.bannerView
-//                                                        attribute:NSLayoutAttributeTrailing
-//                                                        relatedBy:NSLayoutRelationEqual
-//                                                           toItem:self.view
-//                                                        attribute:NSLayoutAttributeTrailing
-//                                                       multiplier:1.0
-//                                                         constant:0]
-//                           ]];
-//    [self.bannerView addConstraint:[NSLayoutConstraint constraintWithItem:self.bannerView
-//                                                                attribute:NSLayoutAttributeHeight
-//                                                                relatedBy:NSLayoutRelationEqual
-//                                                                   toItem:nil
-//                                                                attribute:NSLayoutAttributeNotAnAttribute
-//                                                               multiplier:1.0
-//                                                                 constant:50]];
     [self.bannerView loadAdAndShow];
 }
 

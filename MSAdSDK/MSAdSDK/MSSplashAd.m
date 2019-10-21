@@ -112,6 +112,7 @@
     [[MSSDKNetSession wsqflyNetWorkingShare]get:@"http://123.59.48.113/sdk/req_ad" param:dict maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
         if (response) {
             model = [MSAdModel provinceWithDictionary:response];
+            //如果类型是2 说明是调用视频
 //            model.creative_type = 2;
             NSLog(@"%@", [NSString stringWithFormat:@"%ld",model.width]);
             ws.msAdModel = model;
@@ -121,23 +122,23 @@
         //我们假设一个场景，广告的调用顺序是：1. 广点通；2.穿山甲；3.打底广告；
         if (model) {
             if(model.sdk.count>0){
-                for (int i= 0; i<model.sdk.count; i++) {
-                    MSSDKModel *sdkModel = model.sdk[i];
-                    if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"GDT"]) {
-                        [ws setGDTAppId:sdkModel.app_id placementId:sdkModel.pid];
-                        break;
-                    }
-//                    else if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"CSJ"]){
-//                        [ws setBUAppId:sdkModel.app_id slotID:sdkModel.pid];
-//                        break;
-//                    }
+                MSSDKModel *sdkModel = model.sdk[0];
+                //调用广点通SDK
+                if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"GDT"]) {
+                    [ws setGDTAppId:sdkModel.app_id placementId:sdkModel.pid];
+                }
+                //调用穿山甲SDK
+                else if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"CSJ"]){
+                    [ws setBUAppId:sdkModel.app_id slotID:sdkModel.pid];
                 }
             }
             else{//如果都没有 广点通和穿山甲的广告 那就显示美数广告
-                ws.advertiseView = [[SplashScreenView alloc] initWithFrame:[UIScreen mainScreen].bounds adType:0];
-                ws.advertiseView.adModel = model;
-                ws.advertiseView.delegate = ws;
-                [self.advertiseView  showSplashScreenWithTime:5 adType:0];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    ws.advertiseView = [[SplashScreenView alloc] initWithFrame:[UIScreen mainScreen].bounds adModel:model adType:0];
+                    ws.advertiseView.adModel = model;
+                    ws.advertiseView.delegate = ws;
+                    [self.advertiseView  showSplashScreenWithTime:5 adType:0];
+                });
             }
         }
     } faile:^(NSError *error) {
@@ -147,6 +148,7 @@
         }
     }];
 }
+
 
 #pragma mark - 美数返回json，处理逻辑如下
 /*
@@ -177,6 +179,17 @@
  */
 -(void)splashAdFailToPresent:(GDTSplashAd *)splashAd withError:(NSError *)error
 {
+    MSWS(ws);
+    //如果广点通调用失败后，还有穿山甲的广告，继续调用，不回调失败
+    if (ws.msAdModel.sdk.count==2) {
+        MSSDKModel *sdkModel = ws.msAdModel.sdk[1];
+        //调用穿山甲SDK
+        if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"CSJ"]){
+            [ws setBUAppId:sdkModel.app_id slotID:sdkModel.pid];
+            return;
+        }
+    }
+    //否则的话，调用失败
     if([self.delegate respondsToSelector:@selector(splashAdFailToPresent:withError:)]){
         [self.delegate splashAdFailToPresent:self withError:error];
     }

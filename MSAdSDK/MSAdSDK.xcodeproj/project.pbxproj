@@ -10,6 +10,8 @@
 		2F2A0A24230FE454005F393A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2A0A23230FE454005F393A /* Foundation.framework */; };
 		2F2A0A26230FE45B005F393A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2A0A25230FE45B005F393A /* UIKit.framework */; };
 		2F57686722F7D01E001CD77C /* MSAdSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F57686622F7D01E001CD77C /* MSAdSDK.m */; };
+		2F686B64235DA3F300F51883 /* MRApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F686B63235DA3F300F51883 /* MRApplication.m */; };
+		2F686B65235DA42A00F51883 /* MRApplication.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2F686B62235DA3F300F51883 /* MRApplication.h */; };
 		2F82092322FD13C900B4A94B /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F82092222FD13C900B4A94B /* AdSupport.framework */; };
 		2F82092522FD13D400B4A94B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F82092422FD13D400B4A94B /* CoreLocation.framework */; };
 		2F82092722FD13DE00B4A94B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F82092622FD13DE00B4A94B /* QuartzCore.framework */; };
@@ -70,6 +72,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				2F686B65235DA42A00F51883 /* MRApplication.h in CopyFiles */,
 				548F3DDD231E5F83003CE914 /* MSAdModel.h in CopyFiles */,
 				548F3DDE231E5F83003CE914 /* MSSDKModel.h in CopyFiles */,
 				548F3DDF231E5F83003CE914 /* MSSDKDefines.h in CopyFiles */,
@@ -90,6 +93,8 @@
 		2F57686222F7D01E001CD77C /* libMSAdSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMSAdSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F57686522F7D01E001CD77C /* MSAdSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSAdSDK.h; sourceTree = "<group>"; };
 		2F57686622F7D01E001CD77C /* MSAdSDK.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSAdSDK.m; sourceTree = "<group>"; };
+		2F686B62235DA3F300F51883 /* MRApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MRApplication.h; sourceTree = "<group>"; };
+		2F686B63235DA3F300F51883 /* MRApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MRApplication.m; sourceTree = "<group>"; };
 		2F82092222FD13C900B4A94B /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		2F82092422FD13D400B4A94B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		2F82092622FD13DE00B4A94B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -250,6 +255,8 @@
 				548F3D0C231E5BDE003CE914 /* MSSDKDefines.h */,
 				548F3D14231E5BDE003CE914 /* MSSplashAd.h */,
 				548F3D15231E5BDE003CE914 /* MSSplashAd.m */,
+				2F686B62235DA3F300F51883 /* MRApplication.h */,
+				2F686B63235DA3F300F51883 /* MRApplication.m */,
 				548F3D0D231E5BDE003CE914 /* MSSplashAd */,
 				548F3D16231E5BDE003CE914 /* network */,
 				548F3D19231E5BDE003CE914 /* PrefixHeader.pch */,
@@ -491,6 +498,7 @@
 				548F3D25231E5BDE003CE914 /* NSArray+BWHXMASAdditions.m in Sources */,
 				548F3D30231E5BDE003CE914 /* MSBannerView.m in Sources */,
 				2F57686722F7D01E001CD77C /* MSAdSDK.m in Sources */,
+				2F686B64235DA3F300F51883 /* MRApplication.m in Sources */,
 				548F3D38231E5BDE003CE914 /* MSSDKNetSession.m in Sources */,
 				548F3D2C231E5BDE003CE914 /* SelVideoPlayer.m in Sources */,
 				548F3D31231E5BDE003CE914 /* MSInterstitial.m in Sources */,

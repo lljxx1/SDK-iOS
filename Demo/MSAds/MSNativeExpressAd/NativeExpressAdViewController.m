@@ -24,6 +24,13 @@
 @property (weak, nonatomic) IBOutlet UITextField *placementIdTextField;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+@property (assign, nonatomic) CGFloat height1;
+
+@property (assign, nonatomic) CGFloat height2;
+
+@property (assign, nonatomic) CGFloat height3;
+
+
 @end
 
 @implementation NativeExpressAdViewController
@@ -45,12 +52,23 @@
     [self.heightSlider addTarget:self action:@selector(sliderPositionHChanged) forControlEvents:UIControlEventValueChanged];
     [self.adCountSlider addTarget:self action:@selector(sliderPositionCountChanged) forControlEvents:UIControlEventValueChanged];
     
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"nativeexpresscell"];
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"splitnativeexpresscell"];
+    MSWS(ws);
+    //请求信息流数据
+    [MSNativeAdView requestMSAdData:^(MSAdModel* adModel){
+        ws.height1 = [MSNativeAdView heightCellForRow:adModel nativeAdViewShowType:MSLeftImage];
+        ws.height2 = [MSNativeAdView heightCellForRow:adModel nativeAdViewShowType:MSLeftImageNoButton];
+        ws.height3 = [MSNativeAdView heightCellForRow:adModel nativeAdViewShowType:MSBottomImage];
+        
+        //主线程刷新页面
+        dispatch_async(dispatch_get_main_queue(), ^{
+            ws.tableView.delegate = ws;
+            ws.tableView.dataSource = ws;
+            [ws.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"nativeexpresscell"];
+            [ws refreshButton:nil];
+        });
+    }];
     
-    [self refreshButton:nil];
+
 }
 
 - (IBAction)refreshButton:(id)sender {
@@ -85,31 +103,38 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    if (indexPath.row % 2 == 0) {
-//        UIView *view = [self.expressAdViews objectAtIndex:indexPath.row / 2];
-//        return view.bounds.size.height;
-//    }
-//    else {
-//        return 44;
-//    }
+    
+    if (indexPath.row ==0) {
+        return self.height1;
+    }
+    else if (indexPath.row == 1){
+        return self.height2;
+
+    }
+    else if (indexPath.row == 2){
+        return self.height3;
+
+    }
     return 100;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = nil;
-    if (indexPath.row % 2 == 0) {
-        cell = [self.tableView dequeueReusableCellWithIdentifier:@"nativeexpresscell" forIndexPath:indexPath];
+    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier: @"nativeexpresscell"
+                                                                forIndexPath:indexPath];
+        // Configure the cell...
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleValue1
+                                          reuseIdentifier: @"nativeexpresscell"];
+        }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        for (UIView *view in cell.contentView.subviews) {
+        for (UIView *view in cell.subviews) {
             [view removeFromSuperview];
-
         }
     
         MSNativeAdView *ativeAdView = [[MSNativeAdView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100) curController:self];
@@ -117,20 +142,14 @@
         if (indexPath.row ==0) {
             ativeAdView.nativeAdViewShowType = MSLeftImage;
         }
-        else if (indexPath.row == 2){
+        else if (indexPath.row == 1){
             ativeAdView.nativeAdViewShowType = MSLeftImageNoButton;
         }
-        else if (indexPath.row == 4){
+        else if (indexPath.row == 2){
             ativeAdView.nativeAdViewShowType = MSBottomImage;
         }
-//        UIView *view = [self.expressAdViews objectAtIndex:indexPath.row / 2];
-//        view.tag = 1000;
-        [cell.contentView addSubview:ativeAdView];
+        [cell addSubview:ativeAdView];
         cell.accessibilityIdentifier = @"nativeTemp_ad";
-    } else {
-        cell = [self.tableView dequeueReusableCellWithIdentifier:@"splitnativeexpresscell" forIndexPath:indexPath];
-        cell.backgroundColor = [UIColor grayColor];
-    }
     return cell;
 }
 

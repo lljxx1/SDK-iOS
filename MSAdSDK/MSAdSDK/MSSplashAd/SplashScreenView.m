@@ -40,22 +40,17 @@
 @implementation SplashScreenView
 
 
-- (instancetype)initWithFrame:(CGRect)frame adType:(NSInteger)adType
+- (instancetype)initWithFrame:(CGRect)frame adModel:(MSAdModel*)adModel adType:(NSInteger)adType
 {
     if (self = [super initWithFrame:frame]) {
+        self.adModel = adModel;
         self.adType = adType;
         [self setCustomView:adType];
     }
     return self;
 }
 
-//- (UIViewController*)currentViewController{
-//    if (!_currentViewController) {
-//        _currentViewController = [[UIApplication sharedApplication].delegate window].rootViewController;
-//
-//    }
-//    return _currentViewController;
-//}
+#pragma mark - 设置广告的展示方式
 - (void)setCustomView:(NSInteger)adType{
     _bgView = [UIView new];
     _bgView.frame = [UIScreen mainScreen].bounds;
@@ -85,18 +80,21 @@
     label.frame  = CGRectMake(self.frame.size.width-40, self.frame.size.height-20, 40, 20) ;
     self.adLabel = label;
     
-    SelPlayerConfiguration *configuration = [[SelPlayerConfiguration alloc]init];
-    configuration.shouldAutoPlay = YES;     //自动播放
-    configuration.supportedDoubleTap = NO;     //支持双击播放暂停
-    configuration.shouldAutorotate = YES;   //自动旋转
-    configuration.repeatPlay = NO;     //重复播放
-    configuration.statusBarHideState = SelStatusBarHideStateNever;     //设置状态栏隐藏
-    //设置播放数据源
-    configuration.videoGravity = SelVideoGravityResizeAspect;   //拉伸方式
-    self.configuration = configuration;
-    
-    _player = [[SelVideoPlayer alloc]initWithFrame:self.frame];
-    _player.delegate = self;
+    //有视频
+    if (self.adModel.creative_type == 2) {
+        SelPlayerConfiguration *configuration = [[SelPlayerConfiguration alloc]init];
+        configuration.shouldAutoPlay = YES;     //自动播放
+        configuration.supportedDoubleTap = NO;     //支持双击播放暂停
+        configuration.shouldAutorotate = YES;   //自动旋转
+        configuration.repeatPlay = NO;     //重复播放
+        configuration.statusBarHideState = SelStatusBarHideStateNever;     //设置状态栏隐藏
+        //设置播放数据源
+        configuration.videoGravity = SelVideoGravityResizeAspect;   //拉伸方式
+        self.configuration = configuration;
+        _player = [[SelVideoPlayer alloc]initWithFrame:self.frame];
+        _player.delegate = self;
+    }
+
 //    self.player.backgroundColor = [UIColor redColor];
     //0是开屏 1是banner  2s插屏
     if (adType==0) {
@@ -107,7 +105,9 @@
         _countButton.layer.cornerRadius = 4;
         
         [self addSubview:_adImageView];
-        [self addSubview:self.player];
+        if(self.player){
+            [self addSubview:self.player];
+        }
         [self addSubview:_countButton];
         [self addSubview:label];
     }
@@ -117,7 +117,9 @@
         _countButton.frame = CGRectMake(self.frame.size.width - 20, 2, 15, 15);
         [_countButton setBackgroundImage:[UIImage imageNamed:@"BUAdSDK.bundle/bu_fullClose"] forState:UIControlStateNormal];
         [self addSubview:_adImageView];
-        [self addSubview:self.player];
+        if(self.player){
+            [self addSubview:self.player];
+        }
         [self addSubview:_countButton];
         [self addSubview:label];
     }
@@ -126,7 +128,9 @@
         _countButton.imageView.contentMode=UIViewContentModeCenter;
         _adImageView.contentMode = UIViewContentModeScaleToFill;
         [self addSubview:_adImageView];
-        [self addSubview:self.player];
+        if(self.player){
+            [self addSubview:self.player];
+        }
         [self addSubview:label];
     }
 }
@@ -163,6 +167,8 @@
     if (openType == 0) {
         ADDetailViewController *vc = [[ADDetailViewController alloc]init];
         vc.URLString = self.imgLinkUrl;
+//        vc.URLString = @"https://www.baidu.com";
+//        self.imgLinkUrl;
         [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:vc animated:YES completion:^(){
             if([ws.delegate respondsToSelector:@selector(bannerViewDidPresentFullScreenModal)]){
                 [ws.delegate bannerViewDidPresentFullScreenModal];
@@ -216,12 +222,10 @@
 {
     MSWS(ws);
     ws.count --;
-//    dispatch_async(dispatch_get_main_queue(), ^{
     [ws.countButton setTitle:[NSString stringWithFormat:@"跳过 %ld",(long)ws.count] forState:UIControlStateNormal];
-        if (ws.count == 0) {
-            [ws dismiss];
-        }
-//    });
+    if (ws.count == 0) {
+        [ws dismiss];
+    }
 }
 
 - (void)showSplashScreenWithTime:(NSInteger)ADShowTime adType:(NSInteger)adType
@@ -254,7 +258,6 @@
                         
                     }];
                 }
-            
             }
             ws.adImageView.image = data;
             if (adType==0) {//开屏
@@ -307,9 +310,13 @@
             
         }
         else  if (adType==1) {//banner
-            
+            ws.player.isCountDown = NO;
+            ws.player.playerConfiguration = ws.configuration;
         }
         else  if (adType==2) {//插图
+            ws.player.isCountDown = NO;
+            ws.player.playerConfiguration = ws.configuration;
+            
             ws.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width-ws.adModel.width)/2, ([UIScreen mainScreen].bounds.size.height-ws.adModel.height)/2, ws.adModel.width/2, ws.adModel.height/2);
             ws.player.frame = ws.frame;
             ws.countButton.frame = CGRectMake(CGRectGetMaxX(ws.frame)-20, ([UIScreen mainScreen].bounds.size.height-ws.adImageView.image.size.height/2)/2-20, 15, 15);

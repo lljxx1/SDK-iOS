@@ -60,7 +60,7 @@ static NSString *const adDeadline = @"adDeadline";
  */
 @property (nonatomic, weak) id<MSAdDelegate> delegate;
 
-- (instancetype)initWithFrame:(CGRect)frame adType:(NSInteger)adType;
+- (instancetype)initWithFrame:(CGRect)frame adModel:(MSAdModel*)adModel adType:(NSInteger)adType;
 
 //美数实体
 @property (nonatomic, strong) MSAdModel *adModel;

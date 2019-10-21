@@ -34,7 +34,33 @@
 
 #define IS_PAD (UI_USER_INTERFACE_IDIOM()== UIUserInterfaceIdiomPad)
 
+#define IOS_8_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+
 @implementation MSCommCore
+
+//获取文本大小
++ (CGSize)getTextSize:(NSString *)message fontSize:(NSInteger)fontSize maxChatWidth:(NSInteger)maxChatWidth{
+    CGSize contentSize;
+    if (IOS_8_OR_LATER) {
+        contentSize = [message sizeWithFont:[UIFont systemFontOfSize:fontSize]
+                          constrainedToSize:CGSizeMake(maxChatWidth, CGFLOAT_MAX)
+                              lineBreakMode:NSLineBreakByWordWrapping];
+    }
+    else{
+        
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
+        paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+        //        NSDictionary *attributes = @{NSFontAttributeName:CELL_CONTENT_FONT_SIZE, NSParagraphStyleAttributeName:paragraphStyle.copy}
+        NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:fontSize]};
+        
+        contentSize = [message boundingRectWithSize:CGSizeMake(maxChatWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+        
+    }
+    
+    return contentSize;
+    
+}
+
 + (NSString *)getCurrentDeviceModel{
     struct utsname systemInfo;
     uname(&systemInfo);

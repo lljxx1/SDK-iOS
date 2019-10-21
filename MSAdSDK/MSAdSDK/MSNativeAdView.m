@@ -27,83 +27,101 @@
 
 @property (nonatomic, strong) BUNativeAd *ad;
 
+@property (strong, nonatomic)MSAdModel *msAdModel;
+
 @end
 
 @implementation MSNativeAdView
 - (instancetype)initWithFrame:(CGRect)frame curController:(UIViewController*)controller{
     if (self = [super initWithFrame:frame]) {
-        self.titleLabel = [UILabel new];
-        self.contentLabel = [UILabel new];
-        self.contentLabel.numberOfLines = 0;
-        self.contentLabel.textColor = MSUIColorFromRGB(0x666666);
-        
-        self.imageView = [UIImageView new];
-        self.imageView.backgroundColor = MSUIColorFromRGB(0xF5F5F5);
-        self.imageView.contentMode =  UIViewContentModeScaleAspectFit;
-        self.actionButton = [UIButton new];
-        [self.actionButton setTitle:@"下载" forState:UIControlStateNormal];
-        _actionButton.userInteractionEnabled = YES;
-        _actionButton.backgroundColor = [UIColor orangeColor];
-        _actionButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-        
-        [self addSubview:self.titleLabel];
-        [self addSubview:self.contentLabel];
-        [self addSubview:self.imageView];
-        [self addSubview:self.actionButton];
-        self.nativeAdViewShowType = MSLeftImage;
+        [self custemView];
         [self loadData];
-        
-        [self.actionButton addTarget:self action:@selector(pushToAdVC) forControlEvents:UIControlEventTouchUpInside];
     }
     return self;
 }
+
+- (void)custemView{
+    for (UIView *view in self.subviews) {
+        [view removeFromSuperview];
+    }
+    self.titleLabel = [UILabel new];
+    self.titleLabel.numberOfLines = 0;
+    self.titleLabel.font = [UIFont systemFontOfSize:17];
+    
+    self.contentLabel = [UILabel new];
+    self.contentLabel.numberOfLines = 0;
+    self.contentLabel.textColor = MSUIColorFromRGB(0x666666);
+    self.contentLabel.font = [UIFont systemFontOfSize:16];
+    
+    self.imageView = [UIImageView new];
+    self.imageView.backgroundColor = MSUIColorFromRGB(0xF5F5F5);
+    self.imageView.contentMode =  UIViewContentModeScaleAspectFit;
+    self.actionButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.actionButton setTitle:@"下载" forState:UIControlStateNormal];
+    _actionButton.userInteractionEnabled = YES;
+    _actionButton.backgroundColor = [UIColor orangeColor];
+    _actionButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+    
+    [self addSubview:self.titleLabel];
+    [self addSubview:self.contentLabel];
+    [self addSubview:self.imageView];
+    [self addSubview:self.actionButton];
+//    self.nativeAdViewShowType = MSLeftImage;
+//    [self.actionButton addTarget:self action:@selector(pushToAdVC) forControlEvents:UIControlEventTouchUpInside];
+    self.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tape = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToAdVC)];
+    [self addGestureRecognizer:tape];
+    
+}
+
 #pragma mark - 进入详情
 - (void)pushToAdVC{
     MSWS(ws);
-
-    //点击广告图时，广告图消失，同时像首页发送通知，并把广告页对应的地址传给首页
-    NSInteger openType = ws.adModel.target_type;
-    if (openType == 0) {
-        ADDetailViewController *vc = [[ADDetailViewController alloc]init];
-        if (ws.adModel.dUrl.count>0) {
-            vc.URLString = ws.adModel.dUrl[0];
+    if(ws.adModel){
+        //点击广告图时，广告图消失，同时像首页发送通知，并把广告页对应的地址传给首页
+        NSInteger openType = ws.adModel.target_type;
+        if (openType == 0) {
+            ADDetailViewController *vc = [[ADDetailViewController alloc]init];
+            if (ws.adModel.dUrl.count>0) {
+                vc.URLString = ws.adModel.dUrl[0];
+            }
+            [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:vc animated:YES completion:^(){
+                
+            }];
+            vc.closeBlock = ^{
+                
+            };
         }
-        [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:vc animated:YES completion:^(){
-          
-        }];
-        vc.closeBlock = ^{
-        
-        };
-    }
-    //    else if (openType == 1) {
-    //        //第一种方法  直接跳转
-    //        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id1168889295"]];
-    //    }
-    else if (openType == 1) {
-        //第二中方法  应用内跳转
-        //1:导入StoreKit.framework,控制器里面添加框架#import <StoreKit/StoreKit.h>
-        //2:实现代理SKStoreProductViewControllerDelegate
-        SKStoreProductViewController *storeProductViewContorller = [[SKStoreProductViewController alloc] init];
-        storeProductViewContorller.delegate = self;
-        //        ViewController *viewc = [[ViewController alloc]init];
-        //        __weak typeof(viewc) weakViewController = viewc;
-        
-        //加载一个新的视图展示
-        [storeProductViewContorller loadProductWithParameters:
-         //appId
-         @{SKStoreProductParameterITunesItemIdentifier : @"1168889295"} completionBlock:^(BOOL result, NSError *error) {
-             //回调
-             if(error){
-                 NSLog(@"错误%@",error);
-             }else{
-                 //AS应用界面
-                 [self.currentViewController presentViewController:storeProductViewContorller animated:YES completion:^(){
-//                     if([ws.delegate respondsToSelector:@selector(bannerViewDidPresentFullScreenModal)]){
-//                         [ws.delegate bannerViewDidPresentFullScreenModal];
-//                     }
-                 }];
-             }
-         }];
+        //    else if (openType == 1) {
+        //        //第一种方法  直接跳转
+        //        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id1168889295"]];
+        //    }
+        else if (openType == 1) {
+            //第二中方法  应用内跳转
+            //1:导入StoreKit.framework,控制器里面添加框架#import <StoreKit/StoreKit.h>
+            //2:实现代理SKStoreProductViewControllerDelegate
+            SKStoreProductViewController *storeProductViewContorller = [[SKStoreProductViewController alloc] init];
+            storeProductViewContorller.delegate = self;
+            //        ViewController *viewc = [[ViewController alloc]init];
+            //        __weak typeof(viewc) weakViewController = viewc;
+            
+            //加载一个新的视图展示
+            [storeProductViewContorller loadProductWithParameters:
+             //appId
+             @{SKStoreProductParameterITunesItemIdentifier : @"1168889295"} completionBlock:^(BOOL result, NSError *error) {
+                 //回调
+                 if(error){
+                     NSLog(@"错误%@",error);
+                 }else{
+                     //AS应用界面
+                     [self.currentViewController presentViewController:storeProductViewContorller animated:YES completion:^(){
+                         //                     if([ws.delegate respondsToSelector:@selector(bannerViewDidPresentFullScreenModal)]){
+                         //                         [ws.delegate bannerViewDidPresentFullScreenModal];
+                         //                     }
+                     }];
+                 }
+             }];
+        }
     }
 }
 
@@ -113,6 +131,24 @@
     [self.currentViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
++ (void)requestMSAdData:(RequestMSAdData)msAdData{
+    NSMutableDictionary *dict = [MSCommCore publicParams];
+    NSString *BundleId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+    [dict setObject:BundleId forKey:@"app_package"];
+    [dict setObject:[MSAdSDK appId] forKey:@"app_id"];
+    [dict setObject:@"1004465" forKey:@"pid"];
+    __block MSAdModel *model = nil;
+    [[MSSDKNetSession wsqflyNetWorkingShare]get:@"http://123.59.48.113/sdk/req_ad" param:dict maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+        if (response) {
+            model = [MSAdModel provinceWithDictionary:response];
+            msAdData(model);
+        }
+    } requestHead:^(id response) {
+        
+    } faile:^(NSError *error) {
+     
+    }];
+}
 
 - (void)loadData{
     MSWS(ws);
@@ -122,48 +158,37 @@
     [dict setObject:[MSAdSDK appId] forKey:@"app_id"];
     [dict setObject:@"1004465" forKey:@"pid"];
     __block MSAdModel *model = nil;
-    ws.dataArray = [NSMutableArray array];
-    
     [[MSSDKNetSession wsqflyNetWorkingShare]get:@"http://123.59.48.113/sdk/req_ad" param:dict maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
-        
         if (response) {
-            if ([response isKindOfClass:[NSArray class]]) {
-                for (NSDictionary *dict in response) {
-                    if (dict) {
-                        MSSDKModel *sdkModel = [MSSDKModel provinceWithDictionary:dict];
-                        [ws.dataArray addObject:sdkModel];
-                    }
-                }
-            }
-            else{
-                model = [MSAdModel provinceWithDictionary:response];
-                NSLog(@"%@", [NSString stringWithFormat:@"%ld",model.width]);
-            }
+            model = [MSAdModel provinceWithDictionary:response];
+            //如果类型是2 说明是调用视频
+            //            model.creative_type = 2;
+            NSLog(@"%@", [NSString stringWithFormat:@"%ld",model.width]);
         }
-
     } requestHead:^(id response) {
-        if ([response[@"Response_type"] isEqualToString:@"API"]) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                //回调或者说是通知主线程刷新，
-                ws.adModel = model;
-            });
-        }
-        else if ([response[@"Response_type"] isEqualToString:@"SDK"]) {
-            if (ws.dataArray.count>0) {
-                MSSDKModel *sdkModel = ws.dataArray[0];
+        //我们假设一个场景，广告的调用顺序是：1. 广点通；2.穿山甲；3.打底广告；
+        if (model) {
+            if(model.sdk.count>0){
+                MSSDKModel *sdkModel = model.sdk[0];
+                //调用广点通SDK
                 if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"GDT"]) {
-                    
                     ws.unifiedNativeAd = [[GDTUnifiedNativeAd alloc] initWithAppId:sdkModel.app_id placementId:sdkModel.pid];
                     ws.unifiedNativeAd.delegate = ws;
                     [ws.unifiedNativeAd loadAdWithAdCount:1];
-                   
                 }
+                //调用穿山甲SDK
                 else if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"CSJ"]){
                     [ws loadBUNativeAd:sdkModel.pid];
                 }
             }
+            else{//如果都没有 广点通和穿山甲的广告 那就显示美数广告
+                //回调或者说是通知主线程刷新，
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    ws.adModel = model;
+                    [ws customAdModel:model];
+                });
+            }
         }
-        
     } faile:^(NSError *error) {
         if([ws.delegate respondsToSelector:@selector(nativeAd: didFailWithError:)]){
             [ws.delegate nativeAd:ws didFailWithError:error];
@@ -199,14 +224,32 @@
     self.ad = nativeAd;
 }
 
+/**
+ This method is called when native ad materia failed to load.
+ @param error : the reason of error
+ */
+- (void)nativeAd:(BUNativeAd *)nativeAd didFailWithError:(NSError *_Nullable)error{
+    if (!error) {
+        
+    }
+}
+
 #pragma mark - GDTUnifiedNativeAdDelegate
 - (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> *)unifiedNativeAdDataObjects error:(NSError *)error
 {
+    MSWS(ws);
+    if(ws.msAdModel.sdk.count==2){
+        MSSDKModel *sdkModel = ws.msAdModel.sdk[1];
+        //调用穿山甲SDK
+        if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"CSJ"]){
+            [ws loadBUNativeAd:sdkModel.pid];
+        }
+    }
+    
     if (!error && unifiedNativeAdDataObjects.count > 0) {
         NSLog(@"成功请求到广告数据");
         GDTUnifiedNativeAdDataObject *object = unifiedNativeAdDataObjects[0];
         MSAdModel *model = [[MSAdModel alloc]init];
-        
         return;
     }
     
@@ -230,7 +273,7 @@
 }
 
 
-- (void)setAdModel:(MSAdModel *)adModel{
+- (void)customAdModel:(MSAdModel *)adModel{
     self.titleLabel.text = adModel.title;
     self.contentLabel.text = adModel.content;
     if (adModel.srcUrls.count>0) {
@@ -251,35 +294,65 @@
         [self.actionButton setTitle:@"下载" forState:UIControlStateNormal];
     }
     
+    CGSize titleSize =  [MSCommCore getTextSize:adModel.title fontSize:17 maxChatWidth:self.frame.size.width/2-10];
+    CGSize contentSize =  [MSCommCore getTextSize:adModel.content fontSize:16 maxChatWidth:self.frame.size.width/2-10];
+    
+    //    MSLeftImage= 0, // 展示左图右文+下载按钮
+    //    MSLeftImageNoButton = 1, // 展示左图右文
+    //    MSBottomImage = 2, // 展示上文下大图
+    self.actionButton.hidden = YES;
+    if (_nativeAdViewShowType == MSLeftImage) {
+        self.actionButton.hidden = NO;
+        self.titleLabel.frame = CGRectMake(self.frame.size.width/2, 5, self.frame.size.width/2-10, titleSize.height);
+        self.contentLabel.frame = CGRectMake(CGRectGetMinX(self.titleLabel.frame), CGRectGetMaxY(self.titleLabel.frame), self.frame.size.width/2-10, contentSize.height);
+        self.frame = CGRectMake(0, 0, self.frame.size.width, CGRectGetMaxY(self.titleLabel.frame)+contentSize.height+20+5);
+        
+        self.actionButton.frame = CGRectMake(self.frame.size.width-60, self.frame.size.height-20, 60, 20);
+        self.imageView.frame = CGRectMake(5, 5, self.frame.size.width/2-10, self.frame.size.height-10);
+        
+        
+    }
+    else if (_nativeAdViewShowType == MSLeftImageNoButton){
+        self.titleLabel.frame = CGRectMake(self.frame.size.width/2, 5, self.frame.size.width/2-10, titleSize.height);
+        self.contentLabel.frame = CGRectMake(CGRectGetMinX(self.titleLabel.frame), CGRectGetMaxY(self.titleLabel.frame), self.frame.size.width/2-10, contentSize.height);
+        self.frame = CGRectMake(0, 0, self.frame.size.width, CGRectGetMaxY(self.titleLabel.frame)+contentSize.height+5);
+        self.imageView.frame = CGRectMake(5, 5, self.frame.size.width/2-10, self.frame.size.height-10);
+        
+    }
+    else if (_nativeAdViewShowType == MSBottomImage){
+        titleSize =  [MSCommCore getTextSize:adModel.title fontSize:17 maxChatWidth:self.frame.size.width-10];
+        contentSize =  [MSCommCore getTextSize:adModel.content fontSize:16 maxChatWidth:self.frame.size.width-10];
+        
+        self.titleLabel.frame = CGRectMake(5, 5, self.frame.size.width-10, titleSize.height);
+        self.contentLabel.frame = CGRectMake(CGRectGetMinX(self.titleLabel.frame), CGRectGetMaxY(self.titleLabel.frame), self.frame.size.width-10, contentSize.height);
+        self.frame = CGRectMake(0, 0, self.frame.size.width, CGRectGetMaxY(self.titleLabel.frame)+contentSize.height+5);
+        self.imageView.frame = CGRectMake(5, CGRectGetMaxY(self.contentLabel.frame), self.frame.size.width-10, self.frame.size.width/2-10);
+    }
+    
 }
 
 - (void)setNativeAdViewShowType:(MSNativeAdViewShowType)nativeAdViewShowType{
+    [self custemView];
     _nativeAdViewShowType =nativeAdViewShowType;
+}
+
++ (CGFloat)heightCellForRow:(MSAdModel*)adModel nativeAdViewShowType:(MSNativeAdViewShowType)nativeAdViewShowType{
+    CGSize titleSize =  [MSCommCore getTextSize:adModel.title fontSize:17 maxChatWidth:ScreenWidth/2-10];
+    CGSize contentSize =  [MSCommCore getTextSize:adModel.content fontSize:16 maxChatWidth:ScreenWidth/2-10];
     
-//    MSLeftImage= 0, // 展示左图右文+下载按钮
-//    MSLeftImageNoButton = 1, // 展示左图右文
-//    MSBottomImage = 2, // 展示上文下大图
-    self.actionButton.hidden = YES;
-    if (nativeAdViewShowType == MSLeftImage) {
-        self.actionButton.hidden = NO;
-        self.imageView.frame = CGRectMake(5, 5, self.frame.size.width/2-10, self.frame.size.height-10);
-        self.titleLabel.frame = CGRectMake(self.frame.size.width/2, 5, self.frame.size.width/2-10, 20);
-        self.contentLabel.frame = CGRectMake(CGRectGetMinX(self.titleLabel.frame), CGRectGetMaxY(self.titleLabel.frame), self.frame.size.width/2-10, self.frame.size.height-10-CGRectGetMaxY(self.titleLabel.frame)-20);
-        self.actionButton.frame = CGRectMake(self.frame.size.width-60, self.frame.size.height-20, 60, 20);
-        
+    if(nativeAdViewShowType == MSLeftImage) {
+        return titleSize.height+contentSize.height+10+20;
     }
-    else if (nativeAdViewShowType == MSLeftImageNoButton){
-        self.imageView.frame = CGRectMake(5, 5, self.frame.size.width/2-10, self.frame.size.height-10);
-        self.titleLabel.frame = CGRectMake(self.frame.size.width/2, 5, self.frame.size.width/2-10, 20);
-        self.contentLabel.frame = CGRectMake(CGRectGetMinX(self.titleLabel.frame), CGRectGetMaxY(self.titleLabel.frame), self.frame.size.width/2-10, self.frame.size.height-10-CGRectGetMaxY(self.titleLabel.frame));
+    else if (nativeAdViewShowType == MSLeftImageNoButton)
+    {
+        return titleSize.height+contentSize.height+10;
     }
     else if (nativeAdViewShowType == MSBottomImage){
-        self.titleLabel.frame = CGRectMake(5, 5, self.frame.size.width-10, 20);
-        self.contentLabel.frame = CGRectMake(CGRectGetMinX(self.titleLabel.frame), CGRectGetMaxY(self.titleLabel.frame), self.frame.size.width-10, 30);
-        self.imageView.frame = CGRectMake(5, CGRectGetMaxY(self.contentLabel.frame), self.frame.size.width-10, 50);
+        titleSize =  [MSCommCore getTextSize:adModel.title fontSize:17 maxChatWidth:ScreenWidth-10];
+        contentSize =  [MSCommCore getTextSize:adModel.content fontSize:16 maxChatWidth:ScreenWidth-10];
+        return titleSize.height+contentSize.height+(ScreenWidth/2-10)+10;
     }
-    
-    
+    return 0;
 }
 
 @end

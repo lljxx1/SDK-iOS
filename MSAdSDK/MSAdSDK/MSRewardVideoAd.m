@@ -109,10 +109,12 @@
                 }
             }
             else{//如果都没有 广点通和穿山甲的广告 那就显示美数广告
-                ws.advertiseView = [[SplashScreenView alloc] initWithFrame:[UIScreen mainScreen].bounds adType:0];
-                ws.advertiseView.adModel = model;
-                ws.advertiseView.delegate = ws;
-                [self.advertiseView  showSplashScreenWithTime:5 adType:3];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    ws.advertiseView = [[SplashScreenView alloc] initWithFrame:[UIScreen mainScreen].bounds adModel:model  adType:0];
+                    ws.advertiseView.adModel = model;
+                    ws.advertiseView.delegate = ws;
+                    [self.advertiseView  showSplashScreenWithTime:5 adType:3];
+                });
             }
         }
     } faile:^(NSError *error) {

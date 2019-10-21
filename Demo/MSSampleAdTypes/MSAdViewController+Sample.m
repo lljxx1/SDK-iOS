@@ -17,8 +17,7 @@
                         @[@"开屏广告", @"SplashViewController"],
                         @[@"Banner", @"BannerViewController"],
                         @[@"插屏", @"InterstitialViewController"],
-                        @[@"激励视频广告", @"RewardVideoViewController"],
-
+//                        @[@"激励视频广告", @"RewardVideoViewController"],
                         @[@"信息流", @"NativeExpressAdViewController"]
                         ] mutableCopy];
 }
