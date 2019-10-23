@@ -29,6 +29,8 @@
 
 @property (strong, nonatomic)MSAdModel *msAdModel;
 
+@property (strong, nonatomic)NSMutableDictionary *beganDict;
+
 @end
 
 @implementation MSNativeAdView
@@ -36,8 +38,48 @@
     if (self = [super initWithFrame:frame]) {
         [self custemView];
         [self loadData];
+        //注册界面点击按钮坐标通知
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getMSUITouchPhaseBegan:) name:@"MSUITouchPhaseBegan" object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getUITouchPhaseEnded:) name:@"MSUITouchPhaseEnded" object:nil];
     }
     return self;
+}
+
+//获取视图上点击的起始点
+- (void)getMSUITouchPhaseBegan:(NSNotification*)notification{
+    MSWS(ws);
+    ws.beganDict = notification.object;
+}
+
+//获取视图上点击的终止点
+- (void)getUITouchPhaseEnded:(NSNotification*)notification{
+    MSWS(ws);
+    NSMutableDictionary *dict = notification.object;
+    
+    if(ws.adModel.dUrl.count>0){
+        NSString *dUrl = ws.adModel.dUrl[0];
+        //这里是测试界面点击后坐标的替换 然后上报
+        //        NSString *dUrl = @"http://cuxiao.suning.com/newUser.html?safp=d488778a.homepage1.ViRgl.7&safc=cuxiao.0.0&dx=__DOWN_X__&dy=__DOWN_Y__&ux=__UP_X__&uy=__UP_Y__&cid=__CLICK_ID__&es=__MS_EVENT_SEC__&ems=__MS_EVENT_MSEC__";
+        dUrl = [dUrl stringByReplacingOccurrencesOfString:@"__DOWN_X__" withString:ws.beganDict[@"x"]];
+        dUrl = [dUrl stringByReplacingOccurrencesOfString:@"__DOWN_Y__" withString:ws.beganDict[@"y"]];
+        dUrl = [dUrl stringByReplacingOccurrencesOfString:@"__UP_X__" withString:dict[@"x"]];
+        dUrl = [dUrl stringByReplacingOccurrencesOfString:@"__UP_Y__" withString:dict[@"y"]];
+        
+        [[MSSDKNetSession wsqflyNetWorkingShare]get:dUrl param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+            
+        } requestHead:^(id response) {
+            
+        } faile:^(NSError *error) {
+            
+        }];
+    }
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"MSUITouchPhaseBegan" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"MSUITouchPhaseEnded" object:nil];
+    
 }
 
 - (void)custemView{
@@ -184,6 +226,19 @@
             else{//如果都没有 广点通和穿山甲的广告 那就显示美数广告
                 //回调或者说是通知主线程刷新，
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    //数据曝光即是数据加载完成后上报
+                    if(model&&model.monitorUrl.count>0){
+                        NSString *monitorUrl = model.monitorUrl[0];
+                        [[MSSDKNetSession wsqflyNetWorkingShare]get:monitorUrl param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+                            
+                        } requestHead:^(id response) {
+                            
+                        } faile:^(NSError *error) {
+                            
+                        }];
+                    }
+                    
                     ws.adModel = model;
                     [ws customAdModel:model];
                 });

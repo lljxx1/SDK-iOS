@@ -11,7 +11,6 @@
 
 @interface MRApplication()
 
-@property(nonatomic,assign) BOOL isMoved;
 
 @end
 
@@ -22,23 +21,28 @@
         UITouch *touch = [event.allTouches anyObject];
         
         if (touch.phase == UITouchPhaseBegan) {
-//            self.isMoved = NO;
             UITouch *touch = [event.allTouches anyObject];
             CGPoint locationPointWindow = [touch preciseLocationInView:touch.window];
-            NSLog(@"began TouchLocationWindow:(%.1f,%.1f)",locationPointWindow.x,locationPointWindow.y);
+//            NSLog(@"began TouchLocationWindow:(%.1f,%.1f)",locationPointWindow.x,locationPointWindow.y);
+            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+            [dict setObject:[NSString stringWithFormat:@"%.1f",locationPointWindow.x] forKey:@"x"];
+            [dict setObject:[NSString stringWithFormat:@"%.1f",locationPointWindow.y] forKey:@"y"];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"MSUITouchPhaseBegan" object:dict];
         }
         
         if (touch.phase == UITouchPhaseMoved) {
-//            self.isMoved = YES;
+
         }
         
         if (touch.phase == UITouchPhaseEnded) {
-//            if (!self.isMoved && event.allTouches.count == 1) {
-                UITouch *touch = [event.allTouches anyObject];
-                CGPoint locationPointWindow = [touch preciseLocationInView:touch.window];
-                NSLog(@"ended TouchLocationWindow:(%.1f,%.1f)",locationPointWindow.x,locationPointWindow.y);
-//            }
-//            self.isMoved = NO;
+            UITouch *touch = [event.allTouches anyObject];
+            CGPoint locationPointWindow = [touch preciseLocationInView:touch.window];
+//                NSLog(@"ended TouchLocationWindow:(%.1f,%.1f)",locationPointWindow.x,locationPointWindow.y);
+            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+            [dict setObject:[NSString stringWithFormat:@"%.1f",locationPointWindow.x] forKey:@"x"];
+            [dict setObject:[NSString stringWithFormat:@"%.1f",locationPointWindow.y] forKey:@"y"];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"MSUITouchPhaseEnded" object:dict];
+            
         }
     }
     [super sendEvent:event];
