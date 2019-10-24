@@ -35,3 +35,6 @@ typedef NS_ENUM(NSInteger, MSNativeAdViewShowType) {
 static NSString *kMSGDTMobSDKAppId = @"1105344611";
 
 static NSString *kMSBUMobSDKAppId = @"5000546";
+
+
+#define  BASIC_URL @"http://123.59.48.113/sdk/req_ad"

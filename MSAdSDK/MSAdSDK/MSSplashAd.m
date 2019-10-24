@@ -154,7 +154,7 @@
     [dict setObject:@"1004462" forKey:@"pid"];
     __block MSAdModel *model = nil;
 
-    [[MSSDKNetSession wsqflyNetWorkingShare]get:@"http://123.59.48.113/sdk/req_ad" param:dict maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+    [[MSSDKNetSession wsqflyNetWorkingShare]get:BASIC_URL param:dict maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
         if (response) {
             model = [MSAdModel provinceWithDictionary:response];
             //如果类型是2 说明是调用视频
