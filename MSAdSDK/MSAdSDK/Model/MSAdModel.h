@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MSAdModel : NSObject
+@property (nonatomic , copy) NSString              * req_id;
 @property (nonatomic , copy) NSString              * ader_id;
 @property (nonatomic , copy) NSString              * cid;
 @property (nonatomic , strong) NSArray <NSString *>              * clickUrl;

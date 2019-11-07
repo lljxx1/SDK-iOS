@@ -19,4 +19,9 @@
     return [[self alloc] initWithDictionary:dict];
 }
 
+//预防程序崩溃 为自定义字段
+-(void)setValue:(id)value forUndefinedKey:(NSString*)key{
+    NSLog(@"%@",key);
+}
+
 @end
