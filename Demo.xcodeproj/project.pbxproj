@@ -24,7 +24,7 @@
 		2F2520DA231F5C5B003212B0 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2520D9231F5C5B003212B0 /* WebKit.framework */; };
 		2F2520DC231F5C63003212B0 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2520DB231F5C63003212B0 /* libxml2.tbd */; };
 		2F2520DE231F5DAE003212B0 /* BUAdSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2520DD231F5DAE003212B0 /* BUAdSDK.framework */; };
-		2F2521162325F1C8003212B0 /* libMSAdSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2520B8231F5B0F003212B0 /* libMSAdSDK.a */; };
+		5409F02323753D8200776571 /* libMSAdSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5409F01623753D8200776571 /* libMSAdSDK.a */; };
 		548F3EC5231F47A4003CE914 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3EC4231F47A4003CE914 /* main.m */; };
 		548F3ECB231F47A4003CE914 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3ECA231F47A4003CE914 /* ViewController.m */; };
 		548F3ECE231F47A4003CE914 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 548F3ECC231F47A4003CE914 /* Main.storyboard */; };
@@ -50,20 +50,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2F2520B7231F5B0F003212B0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2F2520B3231F5B0F003212B0 /* MSAdSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2F57686222F7D01E001CD77C;
-			remoteInfo = MSAdSDK;
-		};
-		2F2520B9231F5B1D003212B0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2F2520B3231F5B0F003212B0 /* MSAdSDK.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 2F57686122F7D01E001CD77C;
-			remoteInfo = MSAdSDK;
-		};
 		548F3EDA231F47A5003CE914 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 548F3EB8231F47A4003CE914 /* Project object */;
@@ -81,7 +67,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2F2520B3231F5B0F003212B0 /* MSAdSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MSAdSDK.xcodeproj; path = MSAdSDK/MSAdSDK.xcodeproj; sourceTree = "<group>"; };
 		2F2520BD231F5BEA003212B0 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		2F2520BF231F5BF6003212B0 /* libresolv.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.9.tbd; path = usr/lib/libresolv.9.tbd; sourceTree = SDKROOT; };
 		2F2520C1231F5BFF003212B0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
@@ -99,6 +84,17 @@
 		2F2520D9231F5C5B003212B0 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		2F2520DB231F5C63003212B0 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		2F2520DD231F5DAE003212B0 /* BUAdSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BUAdSDK.framework; sourceTree = "<group>"; };
+		5409F01623753D8200776571 /* libMSAdSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMSAdSDK.a; sourceTree = "<group>"; };
+		5409F01923753D8200776571 /* MSAdModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSAdModel.h; sourceTree = "<group>"; };
+		5409F01A23753D8200776571 /* MSRewardVideoAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSRewardVideoAd.h; sourceTree = "<group>"; };
+		5409F01B23753D8200776571 /* MRApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRApplication.h; sourceTree = "<group>"; };
+		5409F01C23753D8200776571 /* MSSDKDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSDKDefines.h; sourceTree = "<group>"; };
+		5409F01D23753D8200776571 /* MSSplashAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSplashAd.h; sourceTree = "<group>"; };
+		5409F01E23753D8200776571 /* MSNativeAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNativeAdView.h; sourceTree = "<group>"; };
+		5409F01F23753D8200776571 /* MSInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSInterstitial.h; sourceTree = "<group>"; };
+		5409F02023753D8200776571 /* MSBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBannerView.h; sourceTree = "<group>"; };
+		5409F02123753D8200776571 /* MSSDKModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSDKModel.h; sourceTree = "<group>"; };
+		5409F02223753D8200776571 /* MSAdSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSAdSDK.h; sourceTree = "<group>"; };
 		548F3EC0231F47A4003CE914 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		548F3EC4231F47A4003CE914 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		548F3EC9231F47A4003CE914 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -157,7 +153,7 @@
 				2F2520C8231F5C16003212B0 /* UIKit.framework in Frameworks */,
 				2F2520C6231F5C10003212B0 /* Foundation.framework in Frameworks */,
 				2F2520C4231F5C08003212B0 /* Photos.framework in Frameworks */,
-				2F2521162325F1C8003212B0 /* libMSAdSDK.a in Frameworks */,
+				5409F02323753D8200776571 /* libMSAdSDK.a in Frameworks */,
 				2F2520C2231F5BFF003212B0 /* CoreMotion.framework in Frameworks */,
 				2F2520C0231F5BF6003212B0 /* libresolv.9.tbd in Frameworks */,
 				2F2520BE231F5BEA003212B0 /* libc++.tbd in Frameworks */,
@@ -182,14 +178,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2F2520B4231F5B0F003212B0 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				2F2520B8231F5B0F003212B0 /* libMSAdSDK.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		2F2520BB231F5B35003212B0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,10 +201,43 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5409F01523753D5A00776571 /* MS */ = {
+			isa = PBXGroup;
+			children = (
+				5409F01723753D8200776571 /* include */,
+				5409F01623753D8200776571 /* libMSAdSDK.a */,
+			);
+			path = MS;
+			sourceTree = "<group>";
+		};
+		5409F01723753D8200776571 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				5409F01823753D8200776571 /* MSAdSDK */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		5409F01823753D8200776571 /* MSAdSDK */ = {
+			isa = PBXGroup;
+			children = (
+				5409F01923753D8200776571 /* MSAdModel.h */,
+				5409F01A23753D8200776571 /* MSRewardVideoAd.h */,
+				5409F01B23753D8200776571 /* MRApplication.h */,
+				5409F01C23753D8200776571 /* MSSDKDefines.h */,
+				5409F01D23753D8200776571 /* MSSplashAd.h */,
+				5409F01E23753D8200776571 /* MSNativeAdView.h */,
+				5409F01F23753D8200776571 /* MSInterstitial.h */,
+				5409F02023753D8200776571 /* MSBannerView.h */,
+				5409F02123753D8200776571 /* MSSDKModel.h */,
+				5409F02223753D8200776571 /* MSAdSDK.h */,
+			);
+			path = MSAdSDK;
+			sourceTree = "<group>";
+		};
 		548F3EB7231F47A4003CE914 = {
 			isa = PBXGroup;
 			children = (
-				2F2520B3231F5B0F003212B0 /* MSAdSDK.xcodeproj */,
 				548F3EC2231F47A4003CE914 /* Demo */,
 				548F3EDC231F47A5003CE914 /* DemoTests */,
 				548F3EE7231F47A5003CE914 /* DemoUITests */,
@@ -287,6 +308,7 @@
 		548F3FB6231F4AAA003CE914 /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				5409F01523753D5A00776571 /* MS */,
 				2F2520DD231F5DAE003212B0 /* BUAdSDK.framework */,
 				548F3FB7231F4AAA003CE914 /* BUAdSDK.bundle */,
 			);
@@ -378,7 +400,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2F2520BA231F5B1D003212B0 /* PBXTargetDependency */,
 			);
 			name = Demo;
 			productName = Demo;
@@ -452,18 +473,13 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
 			mainGroup = 548F3EB7231F47A4003CE914;
 			productRefGroup = 548F3EC1231F47A4003CE914 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 2F2520B4231F5B0F003212B0 /* Products */;
-					ProjectRef = 2F2520B3231F5B0F003212B0 /* MSAdSDK.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				548F3EBF231F47A4003CE914 /* Demo */,
@@ -472,16 +488,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		2F2520B8231F5B0F003212B0 /* libMSAdSDK.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libMSAdSDK.a;
-			remoteRef = 2F2520B7231F5B0F003212B0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		548F3EBE231F47A4003CE914 /* Resources */ = {
@@ -554,11 +560,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		2F2520BA231F5B1D003212B0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = MSAdSDK;
-			targetProxy = 2F2520B9231F5B1D003212B0 /* PBXContainerItemProxy */;
-		};
 		548F3EDB231F47A5003CE914 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 548F3EBF231F47A4003CE914 /* Demo */;
@@ -690,7 +691,7 @@
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/MSAdSDK/**";
 				INFOPLIST_FILE = Demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Demo/lib/MS";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = meishu.Demo1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -706,7 +707,7 @@
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/MSAdSDK/**";
 				INFOPLIST_FILE = Demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Demo/lib/MS";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = meishu.Demo1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
