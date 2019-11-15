@@ -60,6 +60,8 @@ static NSString *const adDeadline = @"adDeadline";
  */
 @property (nonatomic, weak) id<MSAdDelegate> delegate;
 
+//开屏广告-半屏模式
+- (instancetype)initWithFrame:(CGRect)frame adModel:(MSAdModel *)adModel adType:(NSInteger)adType bottomView:(UIView*)bottomView;
 - (instancetype)initWithFrame:(CGRect)frame adModel:(MSAdModel*)adModel adType:(NSInteger)adType;
 
 //美数实体

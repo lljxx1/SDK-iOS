@@ -44,7 +44,7 @@
 
 {
     
-          static dispatch_once_t onceToken;
+        static dispatch_once_t onceToken;
     
         dispatch_once(&onceToken, ^{
         
@@ -200,7 +200,7 @@
                */
     
         NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError * _Nullable error) {
-                [self stopAnimation:state];
+//                [self stopAnimation:state];
             if (!data) {
                 NSLog(@"网络请求失败");
                 return;
@@ -219,6 +219,13 @@
         
                 NSHTTPURLResponse * da =(NSHTTPURLResponse *)response;
         
+            if (da.statusCode!=200) {
+                 NSDictionary *userInfo1 = [NSDictionary dictionaryWithObjectsAndKeys:@"没有广告", NSLocalizedDescriptionKey, @"失败原因：没有广告", NSLocalizedFailureReasonErrorKey, @"恢复建议：重新加载",NSLocalizedRecoverySuggestionErrorKey,nil];
+                   NSError *error = [[NSError alloc] initWithDomain:NSCocoaErrorDomain code:da.statusCode userInfo:userInfo1];
+                fail(error);
+                return;
+            }
+            
                 NSDictionary *allheadsFiles = da.allHeaderFields;
         
                 NSLog(@"allheadsFiles:%@",allheadsFiles[@"Content-Type"]);
@@ -248,7 +255,7 @@
     
         //7.执行任务
     
-        [self showAnimation:state];
+//        [self showAnimation:state];
     
         [dataTask resume];
     

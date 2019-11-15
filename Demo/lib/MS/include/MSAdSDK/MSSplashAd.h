@@ -52,6 +52,14 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MSSplashAd : NSObject
 
 /**
+ @par needCustom: 是否需要自定义广告界面,默认是NO.如果想自定义就传YES
+ @par drawCustomView: 自定义广告界面的回调 ,把所有自定义的的view都添加到adView , adView的高度占屏幕的四分之一 注意循环引用
+ */
+- (instancetype)initWithNeedCustom:(NSInteger)needCustom drawCustomView:(void(^)(UIView* adView))drawCustomView;
+
+@property (nonatomic, strong) UIImage* backgroundImage;
+
+/**
  *  委托对象
  */
 @property (nonatomic, weak) id<MSSplashAdDelegate> delegate;

@@ -31,7 +31,11 @@
     self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
     
-    MSSplashAd *splash = [[MSSplashAd alloc]init];
+    MSSplashAd *splash = [[MSSplashAd alloc]initWithNeedCustom:YES drawCustomView:^(UIView * _Nonnull adView) {
+        //自定义view添加到adView上
+    }];
+    //设置背景图片-如果不设置广告的背景是透明的
+    splash.backgroundImage = [UIImage imageNamed:@""];
     splash.delegate = self;
     self.splash = splash;
     [splash loadAdAndShowInWindow:self.window];

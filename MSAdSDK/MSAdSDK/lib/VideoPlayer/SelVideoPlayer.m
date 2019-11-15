@@ -9,6 +9,9 @@
 #import "SelVideoPlayer.h"
 #import <AVFoundation/AVFoundation.h>
 #import "SelPlayerConfiguration.h"
+#import "SplashScreenDataManager.h"
+#import "ADDetailViewController.h"
+#import <StoreKit/StoreKit.h>
 
 /** 播放器的播放状态 */
 typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
@@ -18,7 +21,7 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
     SelVideoPlayerStatePause,      // 暂停播放
 };
 
-@interface SelVideoPlayer()<SelPlaybackControlsDelegate>
+@interface SelVideoPlayer()<SelPlaybackControlsDelegate,SKStoreProductViewControllerDelegate>
 
 /** 播放器 */
 @property (nonatomic, strong) AVPlayerItem *playerItem;
@@ -42,6 +45,8 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
 @property (nonatomic, assign) SelVideoPlayerState playerState;
 /** 是否结束播放 */
 @property (nonatomic, assign) BOOL playDidEnd;
+/** 播放完的视图 */
+@property (nonatomic, strong) UIView *playDidEndView;
 
 @end
 
@@ -59,6 +64,82 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
 //    }
 //    return self;
 //}
+
+- (UIView*)playDidEndView{
+    if (!_playDidEndView) {
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        _playDidEndView = [[UIView alloc]initWithFrame:keyWindow.bounds];
+    }
+    return _playDidEndView;
+}
+
+- (void)setAdModel:(MSAdModel *)adModel{
+    MSWS(ws);
+    ws.playDidEndView.hidden = YES;
+    _adModel = adModel;
+    if (adModel&&adModel.video_endcover) {
+        NSString *video_endcover = adModel.video_endcover;
+        [SplashScreenDataManager getAdvertisingImageDataImageWithUrl:video_endcover imgLinkUrl:video_endcover success:^(id data) {
+            // 1.广告图片
+                UIImageView *adImageView = [[UIImageView alloc] initWithFrame:ws.playDidEndView.frame];
+             adImageView.userInteractionEnabled = YES;
+             adImageView.clipsToBounds = YES;
+             UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pushToAdVC)];
+             [adImageView addGestureRecognizer:tap];
+            [ws.playDidEndView addSubview:adImageView];
+            
+        } fail:^(NSError *error) {
+               
+        }];
+    }
+}
+
+- (void)pushToAdVC{
+    MSWS(ws);
+    ws.playDidEndView.hidden= YES;
+    NSInteger openType = ws.adModel.target_type;
+    if (ws.adModel&&ws.adModel.dUrl.count>0) {
+        NSString *dUrl = ws.adModel.dUrl[0];
+        if (openType == 0) {
+            ADDetailViewController *vc = [[ADDetailViewController alloc]init];
+            vc.URLString = dUrl;
+
+            [[[UIApplication sharedApplication].delegate window].rootViewController presentViewController:vc animated:YES completion:^(){
+            }];
+            vc.closeBlock = ^{
+
+            };
+        }
+        else if (openType == 1) {
+            //第二中方法  应用内跳转
+            //1:导入StoreKit.framework,控制器里面添加框架#import <StoreKit/StoreKit.h>
+            //2:实现代理SKStoreProductViewControllerDelegate
+            SKStoreProductViewController *storeProductViewContorller = [[SKStoreProductViewController alloc] init];
+            storeProductViewContorller.delegate = ws;
+            //加载一个新的视图展示
+            [storeProductViewContorller loadProductWithParameters:
+             //appId
+             @{SKStoreProductParameterITunesItemIdentifier : @"1168889295"} completionBlock:^(BOOL result, NSError *error) {
+                 //回调
+                 if(error){
+                     NSLog(@"错误%@",error);
+                 }else{
+                     //AS应用界面
+                     [ws.currentViewController presentViewController:storeProductViewContorller animated:YES completion:^(){
+                     
+                     }];
+                 }
+             }];
+        }
+    }
+    
+}
+
+#pragma mark - 评分取消按钮监听
+//取消按钮监听
+- (void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController{
+    [self.currentViewController dismissViewControllerAnimated:YES completion:nil];
+}
 
 - (void)setPlayerConfiguration:(SelPlayerConfiguration *)playerConfiguration{
     _playerConfiguration = playerConfiguration;
@@ -153,7 +234,7 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
     }];
     self.frame = _originalRect;
     [_originalSuperview addSubview:self];
-    
+    [_originalSuperview addSubview:self.playDidEndView];
     [self setNeedsLayout];
     [self layoutIfNeeded];
     
@@ -172,6 +253,18 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
         [self.playbackControls _setPlayButtonSelect:YES];
         if (self.playerState == SelVideoPlayerStatePause) {
             self.playerState = SelVideoPlayerStatePlaying;
+        }
+        
+//        音/视频广告(播放开始时上报)
+        if (self.adModel.video_start.count>0) {
+            NSString *video_start = self.adModel.video_start[0];
+            [[MSSDKNetSession wsqflyNetWorkingShare]get:video_start param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+                           
+                       } requestHead:^(id response) {
+                           
+                       } faile:^(NSError *error) {
+                           
+                       }];
         }
     }
 }
@@ -288,6 +381,7 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
 /** 视频播放结束事件监听 */
 - (void)videoDidPlayToEnd:(NSNotification *)notify
 {
+    self.playDidEndView.hidden= NO;
     self.playDidEnd = YES;
     if (_playerConfiguration.repeatPlay) {
         [self _replayVideo];
@@ -295,6 +389,17 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
     {
         [self _pauseVideo];
     }
+    if (self.adModel.video_complete.count>0) {
+            NSString *video_complete = self.adModel.video_complete[0];
+        [[MSSDKNetSession wsqflyNetWorkingShare]get:video_complete param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+                   
+               } requestHead:^(id response) {
+                   
+               } faile:^(NSError *error) {
+                   
+          }];
+    }
+  
 }
 
 /** 创建播放器 以及控制面板*/
@@ -369,11 +474,56 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
                     [weakSelf.playbackControls _retryButtonShow:YES];
                 }
                 else{
+                  
                     [weakSelf.playbackControls.countButton setTitle:[NSString stringWithFormat:@"%ld",countTime] forState:UIControlStateNormal];
+                                      //根据播放进度去上报
+                    CGFloat avarateTime =countTime;
+                    [weakSelf videoUpload:avarateTime];
                 }
             }
         }
     }];
+}
+
+/**
+上报百分比
+@param avarateTime 上报百分比
+*/
+
+- (void)videoUpload:(NSInteger)avarateTime{
+    MSWS(ws);
+    float stringFloat = (float)avarateTime/ws.adModel.video_duration;
+    NSLog(@"%.2f",stringFloat);//ok
+
+//    CGFloat stringFloat =(ws.adModel.video_duration-avarateTime)*1.00/(ws.adModel.video_duration*1.00);
+                            
+    if (stringFloat == 0.25||stringFloat == 0.50||stringFloat==0.75 ) {
+        NSString *videoStr = @"";
+        if (stringFloat == 0.25) {
+            if (ws.adModel.video_one_quarter.count>0) {
+                videoStr = ws.adModel.video_one_quarter[0];
+            }
+        }
+        else if (stringFloat == 0.50){
+            if (ws.adModel.video_one_half.count>0) {
+                   videoStr = ws.adModel.video_one_half[0];
+               }
+        }
+        else if (stringFloat == 0.75){
+            if (ws.adModel.video_three_quarter.count>0) {
+                videoStr = ws.adModel.video_three_quarter[0];
+            }
+        }
+
+    [[MSSDKNetSession wsqflyNetWorkingShare]get:videoStr param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+             
+         } requestHead:^(id response) {
+             
+         } faile:^(NSError *error) {
+             
+    }];
+        
+    }
 }
 
 /**
@@ -533,9 +683,18 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
 /** 控制面板单击事件 */
 - (void)tapGesture
 {
-    if (_delegate && [_delegate respondsToSelector:@selector(tapGesture)]) {
-        [_delegate tapGesture];
+    
+    if (self.playerState == SelVideoPlayerStatePlaying) {
+        [self _pauseVideo];
     }
+    else if (self.playerState == SelVideoPlayerStatePause)
+    {
+        [self _playVideo];
+    }
+    
+//    if (_delegate && [_delegate respondsToSelector:@selector(tapGesture)]) {
+//        [_delegate tapGesture];
+//    }
 //    [_playbackControls _playerShowOrHidePlaybackControls];
 }
 
@@ -556,6 +715,7 @@ typedef NS_ENUM(NSInteger, SelVideoPlayerState) {
 /** 重新加载视频 */
 - (void)retryButtonAction
 {
+    self.playDidEndView.hidden= YES;
     [_playbackControls _retryButtonShow:NO];
     [_playbackControls _activityIndicatorViewShow:YES];
 //    [self _setupPlayer];

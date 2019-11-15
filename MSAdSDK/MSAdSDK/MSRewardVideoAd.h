@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "MSSDKDefines.h"
+
 @class MSRewardVideoAd;
 @protocol MSRewardedVideoAdDelegate <NSObject>
 
@@ -89,6 +91,12 @@
  *  详解：frame - banner 展示的位置和大小
  */
 - (instancetype)initWithCurController:(UIViewController*)controller;
+
+/**
+*  加载数据
+*  详解：加载数据
+*/
+- (void)loadData;
 
 /**
  *  显示广告

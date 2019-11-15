@@ -15,8 +15,7 @@
 @required
 //倒计时关闭
 - (void)countButtonAction;
-/** 控制面板单击事件 */
-- (void)tapGesture;
+
 @end
 
 @class SelPlayerConfiguration;
@@ -32,8 +31,12 @@
 /** 是否是倒计时 */
 @property (nonatomic, assign) BOOL isCountDown;
 @property (nonatomic, strong) SelPlayerConfiguration *playerConfiguration;
+//美数实体
+@property (nonatomic, strong) MSAdModel *adModel;
 
 @property (nonatomic, weak) id<SelVideoPlayerDelegate> delegate;
+
+@property (nonatomic, strong)UIViewController *currentViewController;
 
 /** 播放视频 */
 - (void)_playVideo;

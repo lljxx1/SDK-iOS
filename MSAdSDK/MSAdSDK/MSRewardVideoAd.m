@@ -38,10 +38,10 @@
         self.currentViewController = controller;
         self.showType = MSShowTypeBU;
         //初始化广点通
-        [self setGDTAppId:kMSGDTMobSDKAppId placementId:@"8020744212936426"];
-        //初始化穿山甲
-        [self setBUAppId:kMSBUMobSDKAppId slotID:@"900546826"];
-        
+//        [self setGDTAppId:kMSGDTMobSDKAppId placementId:@"8020744212936426"];
+//        //初始化穿山甲
+//        [self setBUAppId:kMSBUMobSDKAppId slotID:@"900546826"];
+//        
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getMSUITouchPhaseBegan:) name:@"MSUITouchPhaseBegan" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getUITouchPhaseEnded:) name:@"MSUITouchPhaseEnded" object:nil];
         
@@ -107,73 +107,83 @@
 }
 
 /**
+*  加载数据
+*  详解：加载数据
+*/
+- (void)loadData{
+    MSWS(ws);
+       NSMutableDictionary *dict = [MSCommCore publicParams];
+       NSString *BundleId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+       [dict setObject:BundleId forKey:@"app_package"];
+       [dict setObject:[MSAdSDK appId] forKey:@"app_id"];
+       [dict setObject:@"1004467" forKey:@"pid"];
+    
+       __block MSAdModel *model = nil;
+       
+       [[MSSDKNetSession wsqflyNetWorkingShare]get:BASIC_URL param:dict maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+           if (response) {
+               model = [MSAdModel provinceWithDictionary:response];
+               NSLog(@"%@", [NSString stringWithFormat:@"%ld",model.width]);
+               ws.msAdModel = model;
+               //主线程
+               dispatch_async(dispatch_get_main_queue(), ^{
+                     if([ws.delegate respondsToSelector:@selector(rewardVideoAdDidLoad:)]){
+                                       [ws.delegate rewardVideoAdDidLoad:ws];
+                                   }
+                   
+               });
+              
+           }
+       } requestHead:^(id response) {
+           NSLog(@"%@",response);
+
+       } faile:^(NSError *error) {
+           //主线程
+            dispatch_async(dispatch_get_main_queue(), ^{
+              if([ws.delegate respondsToSelector:@selector(rewardVideoAd: didFailWithError:)]){
+                        [ws.delegate rewardVideoAd:ws didFailWithError:error];
+                    }
+            });
+       }];
+}
+
+/**
  *  显示广告
  *  详解：显示广告
  */
 - (void)showAd{
-//    if (self.showType == MSShowTypeGDT) {
-//        [self.rewardVideoAd showAdFromRootViewController:self.currentViewController];
-//    }
-//    else if (self.showType == MSShowTypeBU){
-//        [self.rewardedVideoAd showAdFromRootViewController:self.currentViewController.navigationController ritScene:BURitSceneType_custom ritSceneDescribe:nil];
-//    }
-    
-    
     MSWS(ws);
-    NSMutableDictionary *dict = [MSCommCore publicParams];
-    NSString *BundleId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
-    [dict setObject:BundleId forKey:@"app_package"];
-    [dict setObject:[MSAdSDK appId] forKey:@"app_id"];
-    [dict setObject:@"1004462" forKey:@"pid"];
-    __block MSAdModel *model = nil;
-    
-    [[MSSDKNetSession wsqflyNetWorkingShare]get:BASIC_URL param:dict maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
-        if (response) {
-            model = [MSAdModel provinceWithDictionary:response];
-            model.creative_type = 2;
-            NSLog(@"%@", [NSString stringWithFormat:@"%ld",model.width]);
-            ws.msAdModel = model;
+    //我们假设一个场景，广告的调用顺序是：1. 广点通；2.穿山甲；3.打底广告；
+    if (ws.msAdModel) {
+        if(ws.msAdModel.sdk.count>0){
+                MSSDKModel *sdkModel = ws.msAdModel.sdk[0];
+                if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"GDT"]) {
+                    [ws setGDTAppId:sdkModel.app_id placementId:sdkModel.pid];
+                }
+                else if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"CSJ"]){
+                    [ws setBUAppId:sdkModel.app_id slotID:sdkModel.pid];
+                }
         }
-    } requestHead:^(id response) {
-        NSLog(@"%@",response);
-        //我们假设一个场景，广告的调用顺序是：1. 广点通；2.穿山甲；3.打底广告；
-        if (model) {
-            if(model.sdk.count>0){
-                    MSSDKModel *sdkModel = model.sdk[0];
-                    if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"GDT"]) {
-                        [ws setGDTAppId:sdkModel.app_id placementId:sdkModel.pid];
-                    }
-                    else if (sdkModel.sdk&&[sdkModel.sdk isEqualToString:@"CSJ"]){
-                        [ws setBUAppId:sdkModel.app_id slotID:sdkModel.pid];
-                    }
-            }
-            else{//如果都没有 广点通和穿山甲的广告 那就显示美数广告
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    //数据曝光即是数据加载完成后上报
-                    if(model&&model.monitorUrl.count>0){
-                        NSString *monitorUrl = model.monitorUrl[0];
-                        [[MSSDKNetSession wsqflyNetWorkingShare]get:monitorUrl param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
-                            
-                        } requestHead:^(id response) {
-                            
-                        } faile:^(NSError *error) {
-                            
-                        }];
-                    }
-                    
-                    ws.advertiseView = [[SplashScreenView alloc] initWithFrame:[UIScreen mainScreen].bounds adModel:model  adType:0];
-                    ws.advertiseView.adModel = model;
-                    ws.advertiseView.delegate = ws;
-                    [ws.advertiseView  showSplashScreenWithTime:5 adType:3];
-                });
-            }
+        else{//如果都没有 广点通和穿山甲的广告 那就显示美数广告
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //数据曝光即是数据加载完成后上报
+                if(ws.msAdModel&&ws.msAdModel.monitorUrl.count>0){
+                    NSString *monitorUrl = ws.msAdModel.monitorUrl[0];
+                    [[MSSDKNetSession wsqflyNetWorkingShare]get:monitorUrl param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+                        
+                    } requestHead:^(id response) {
+                        
+                    } faile:^(NSError *error) {
+                        
+                    }];
+                }
+                ws.advertiseView = [[SplashScreenView alloc] initWithFrame:[UIScreen mainScreen].bounds adModel:ws.msAdModel  adType:0];
+                ws.advertiseView.adModel = ws.msAdModel;
+                ws.advertiseView.delegate = ws;
+                [ws.advertiseView  showSplashScreenWithTime:5 adType:3];
+            });
         }
-    } faile:^(NSError *error) {
-        
-    }];
-    
-    
+    }
 }
 
 
@@ -403,7 +413,6 @@
 }
 
 
-
 /**
  *  广告将要关闭回调
  */
@@ -411,7 +420,6 @@
     if([self.delegate respondsToSelector:@selector(rewardVideoAdDidClose:)]){
         [self.delegate rewardVideoAdDidClose:self];
     }
-    //    [splashAd removeFromSuperview];
 }
 
 /**
@@ -421,7 +429,6 @@
     if([self.delegate respondsToSelector:@selector(rewardVideoAdDidPlayFinish:)]){
         [self.delegate rewardVideoAdDidPlayFinish:self];
     }
-    //    [splashAd removeFromSuperview];
     
 }
 

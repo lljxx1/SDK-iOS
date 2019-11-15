@@ -33,12 +33,24 @@
 
 @property (nonatomic, assign) NSInteger msAdType;
 
+@property (nonatomic, strong) UIView* bottomView;
+
 
 @end
  
 
 @implementation SplashScreenView
 
+//开屏广告-半屏模式
+- (instancetype)initWithFrame:(CGRect)frame adModel:(MSAdModel *)adModel adType:(NSInteger)adType bottomView:(UIView*)bottomView{
+    if (self = [super initWithFrame:frame]) {
+        self.adModel = adModel;
+        self.adType = adType;
+        self.bottomView = bottomView;
+        [self setCustomView:adType];
+       }
+       return self;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame adModel:(MSAdModel*)adModel adType:(NSInteger)adType
 {
@@ -77,7 +89,7 @@
     label.text = @"广告";
     label.textColor = [UIColor whiteColor];
     label.font = [UIFont boldSystemFontOfSize:10];
-    label.frame  = CGRectMake(self.frame.size.width-40, self.frame.size.height-20, 40, 20) ;
+    label.frame  = CGRectMake(self.frame.size.width-50, self.frame.size.height-30, 40, 20) ;
     self.adLabel = label;
     
     //有视频
@@ -98,6 +110,18 @@
 //    self.player.backgroundColor = [UIColor redColor];
     //0是开屏 1是banner  2s插屏
     if (adType==0) {
+        if (self.bottomView != nil) {
+            CGRect rect = _adImageView.frame;
+            rect.size.height -= _bottomView.frame.size.height;
+            _adImageView.frame = rect;
+            rect = label.frame;
+            rect.origin.y -= _bottomView.frame.size.height;
+            label.frame = rect;
+            rect = _bottomView.frame;
+            rect.origin.y = CGRectGetMaxY(_adImageView.frame);
+            _bottomView.frame = rect;
+            [self addSubview:_bottomView];
+        }
         _adImageView.contentMode = UIViewContentModeScaleAspectFill;
         _countButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_countButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -106,10 +130,18 @@
         
         [self addSubview:_adImageView];
         if(self.player){
+            if (self.bottomView != nil) {
+                CGRect rect = _player.frame;
+                rect.size.height -= _bottomView.frame.size.height;
+                _player.frame = rect;
+            }
             [self addSubview:self.player];
         }
         [self addSubview:_countButton];
+        
         [self addSubview:label];
+        
+        
     }
     else if (adType==1){
         _countButton.imageView.contentMode=UIViewContentModeCenter;
@@ -267,6 +299,7 @@
                 [ws startTimer];
                 UIWindow *window = [[UIApplication sharedApplication].delegate window];
                 window.hidden = NO;
+                [window addSubview:ws.bgView];
                 [window addSubview:ws];
                 
             }
@@ -306,6 +339,7 @@
             
             UIWindow *window = [[UIApplication sharedApplication].delegate window];
             window.hidden = NO;
+            [window addSubview:ws.bgView];
             [window addSubview:ws];
             
         }

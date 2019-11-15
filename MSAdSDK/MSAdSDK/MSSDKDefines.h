@@ -26,6 +26,12 @@ typedef NS_ENUM(NSInteger, MSShowType) {
     MSShowTypeBU = 2, // 展示穿山甲
 };
 
+typedef NS_ENUM(NSInteger, MSOrientation) {
+    MSOrientationPortrait = 0, // 展示竖屏
+    MSOrientationLandscapeRight = 1, // 展示横屏
+};
+
+
 typedef NS_ENUM(NSInteger, MSNativeAdViewShowType) {
     MSLeftImage= 0, // 展示左图右文+下载按钮
     MSLeftImageNoButton = 1, // 展示左图右文

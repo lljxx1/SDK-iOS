@@ -31,6 +31,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic , copy) NSString              * video_cover;//音视频封面图地址
 
+@property (nonatomic , copy) NSString              * video_endcover;//视频播放完成后，需要展示的封面图
+
+@property (nonatomic , assign) NSInteger               video_keep_time;//强制观看时长(单位/秒)，此字段不存在或 等于 0 表示观看全部视频
+
+@property (nonatomic , assign) NSInteger               video_preload_time;//视频预加载后的有效时间(在该时间间隔内 播放为有效，单位/秒), 此字段不存在或 等于 0 表示不允许预加载
+@property (nonatomic , copy) NSString              * video_endpage_html;//视频播放完成后，需要用 webview 渲染的 HTML
+
+@property (nonatomic , copy) NSString              * action_text;//引导行动语:查看详情、立即下载...
+
 @property (nonatomic , assign) NSInteger              video_duration;//音视频时长(单位/秒)
 
 @property (nonatomic , copy) NSString              * title;//标题
