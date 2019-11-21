@@ -7,7 +7,7 @@
 //
 
 #import "SplashViewController.h"
-#import "MSAdSDK/MSSplashAd.h"
+#import "MSSplashAd.h"
 
 @interface SplashViewController () <MSSplashAdDelegate>
 

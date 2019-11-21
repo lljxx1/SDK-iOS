@@ -7,6 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08CD71E42386878600032548 /* BUAdSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08CD71D42386878600032548 /* BUAdSDK.framework */; };
+		08CD71E52386878600032548 /* libMSAdSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08CD71E22386878600032548 /* libMSAdSDK.a */; };
+		08CD71E62386878600032548 /* BUAdSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 08CD71E32386878600032548 /* BUAdSDK.bundle */; };
+		08CD71FC238688B100032548 /* NativeExpressAdViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08CD71EA238688B000032548 /* NativeExpressAdViewController.xib */; };
+		08CD71FD238688B100032548 /* NativeExpressAdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CD71EB238688B000032548 /* NativeExpressAdViewController.m */; };
+		08CD71FE238688B100032548 /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CD71EE238688B000032548 /* SplashViewController.m */; };
+		08CD71FF238688B100032548 /* SplashViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08CD71EF238688B000032548 /* SplashViewController.xib */; };
+		08CD7200238688B100032548 /* RewardVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CD71F1238688B000032548 /* RewardVideoViewController.m */; };
+		08CD7201238688B100032548 /* RewardVideoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08CD71F2238688B000032548 /* RewardVideoViewController.xib */; };
+		08CD7202238688B100032548 /* InterstitialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08CD71F6238688B000032548 /* InterstitialViewController.xib */; };
+		08CD7203238688B100032548 /* InterstitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CD71F7238688B000032548 /* InterstitialViewController.m */; };
+		08CD7204238688B100032548 /* BannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08CD71F9238688B000032548 /* BannerViewController.xib */; };
+		08CD7205238688B100032548 /* BannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CD71FA238688B000032548 /* BannerViewController.m */; };
 		2F2520BE231F5BEA003212B0 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2520BD231F5BEA003212B0 /* libc++.tbd */; };
 		2F2520C0231F5BF6003212B0 /* libresolv.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2520BF231F5BF6003212B0 /* libresolv.9.tbd */; };
 		2F2520C2231F5BFF003212B0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2520C1231F5BFF003212B0 /* CoreMotion.framework */; };
@@ -23,8 +36,6 @@
 		2F2520D8231F5C55003212B0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2520D7231F5C54003212B0 /* AVFoundation.framework */; };
 		2F2520DA231F5C5B003212B0 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2520D9231F5C5B003212B0 /* WebKit.framework */; };
 		2F2520DC231F5C63003212B0 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2520DB231F5C63003212B0 /* libxml2.tbd */; };
-		2F2520DE231F5DAE003212B0 /* BUAdSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2520DD231F5DAE003212B0 /* BUAdSDK.framework */; };
-		5409F02323753D8200776571 /* libMSAdSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5409F01623753D8200776571 /* libMSAdSDK.a */; };
 		548F3EC5231F47A4003CE914 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3EC4231F47A4003CE914 /* main.m */; };
 		548F3ECB231F47A4003CE914 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3ECA231F47A4003CE914 /* ViewController.m */; };
 		548F3ECE231F47A4003CE914 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 548F3ECC231F47A4003CE914 /* Main.storyboard */; };
@@ -32,17 +43,6 @@
 		548F3ED3231F47A4003CE914 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 548F3ED1231F47A4003CE914 /* LaunchScreen.storyboard */; };
 		548F3EDE231F47A5003CE914 /* DemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3EDD231F47A5003CE914 /* DemoTests.m */; };
 		548F3EE9231F47A5003CE914 /* DemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3EE8231F47A5003CE914 /* DemoUITests.m */; };
-		548F3FD4231F4AAA003CE914 /* BUAdSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 548F3FB7231F4AAA003CE914 /* BUAdSDK.bundle */; };
-		548F3FD5231F4AAA003CE914 /* BannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3FBB231F4AAA003CE914 /* BannerViewController.m */; };
-		548F3FD6231F4AAA003CE914 /* BannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 548F3FBC231F4AAA003CE914 /* BannerViewController.xib */; };
-		548F3FD7231F4AAA003CE914 /* InterstitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3FBF231F4AAA003CE914 /* InterstitialViewController.m */; };
-		548F3FD8231F4AAA003CE914 /* InterstitialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 548F3FC0231F4AAA003CE914 /* InterstitialViewController.xib */; };
-		548F3FD9231F4AAA003CE914 /* NativeExpressAdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3FC3231F4AAA003CE914 /* NativeExpressAdViewController.m */; };
-		548F3FDA231F4AAA003CE914 /* NativeExpressAdViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 548F3FC4231F4AAA003CE914 /* NativeExpressAdViewController.xib */; };
-		548F3FDB231F4AAA003CE914 /* RewardVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3FC7231F4AAA003CE914 /* RewardVideoViewController.m */; };
-		548F3FDC231F4AAA003CE914 /* RewardVideoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 548F3FC8231F4AAA003CE914 /* RewardVideoViewController.xib */; };
-		548F3FDD231F4AAA003CE914 /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3FCB231F4AAA003CE914 /* SplashViewController.m */; };
-		548F3FDE231F4AAA003CE914 /* SplashViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 548F3FCC231F4AAA003CE914 /* SplashViewController.xib */; };
 		548F3FDF231F4AAA003CE914 /* MSAdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3FCE231F4AAA003CE914 /* MSAdViewController.m */; };
 		548F3FE0231F4AAA003CE914 /* MSNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3FD0231F4AAA003CE914 /* MSNavigationController.m */; };
 		548F3FE1231F4AAA003CE914 /* MSAdViewController+Sample.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3FD3231F4AAA003CE914 /* MSAdViewController+Sample.m */; };
@@ -67,6 +67,34 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		08CD71D42386878600032548 /* BUAdSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BUAdSDK.framework; sourceTree = "<group>"; };
+		08CD71D82386878600032548 /* MSAdModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSAdModel.h; sourceTree = "<group>"; };
+		08CD71D92386878600032548 /* MSRewardVideoAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSRewardVideoAd.h; sourceTree = "<group>"; };
+		08CD71DA2386878600032548 /* MRApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRApplication.h; sourceTree = "<group>"; };
+		08CD71DB2386878600032548 /* MSSDKDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSDKDefines.h; sourceTree = "<group>"; };
+		08CD71DC2386878600032548 /* MSSplashAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSplashAd.h; sourceTree = "<group>"; };
+		08CD71DD2386878600032548 /* MSNativeAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNativeAdView.h; sourceTree = "<group>"; };
+		08CD71DE2386878600032548 /* MSInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSInterstitial.h; sourceTree = "<group>"; };
+		08CD71DF2386878600032548 /* MSBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBannerView.h; sourceTree = "<group>"; };
+		08CD71E02386878600032548 /* MSSDKModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSDKModel.h; sourceTree = "<group>"; };
+		08CD71E12386878600032548 /* MSAdSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSAdSDK.h; sourceTree = "<group>"; };
+		08CD71E22386878600032548 /* libMSAdSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMSAdSDK.a; sourceTree = "<group>"; };
+		08CD71E32386878600032548 /* BUAdSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = BUAdSDK.bundle; sourceTree = "<group>"; };
+		08CD71E9238688B000032548 /* NativeExpressAdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeExpressAdViewController.h; sourceTree = "<group>"; };
+		08CD71EA238688B000032548 /* NativeExpressAdViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NativeExpressAdViewController.xib; sourceTree = "<group>"; };
+		08CD71EB238688B000032548 /* NativeExpressAdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NativeExpressAdViewController.m; sourceTree = "<group>"; };
+		08CD71ED238688B000032548 /* SplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
+		08CD71EE238688B000032548 /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
+		08CD71EF238688B000032548 /* SplashViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SplashViewController.xib; sourceTree = "<group>"; };
+		08CD71F1238688B000032548 /* RewardVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RewardVideoViewController.m; sourceTree = "<group>"; };
+		08CD71F2238688B000032548 /* RewardVideoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RewardVideoViewController.xib; sourceTree = "<group>"; };
+		08CD71F3238688B000032548 /* RewardVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RewardVideoViewController.h; sourceTree = "<group>"; };
+		08CD71F5238688B000032548 /* InterstitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterstitialViewController.h; sourceTree = "<group>"; };
+		08CD71F6238688B000032548 /* InterstitialViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InterstitialViewController.xib; sourceTree = "<group>"; };
+		08CD71F7238688B000032548 /* InterstitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterstitialViewController.m; sourceTree = "<group>"; };
+		08CD71F9238688B000032548 /* BannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BannerViewController.xib; sourceTree = "<group>"; };
+		08CD71FA238688B000032548 /* BannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BannerViewController.m; sourceTree = "<group>"; };
+		08CD71FB238688B000032548 /* BannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BannerViewController.h; sourceTree = "<group>"; };
 		2F2520BD231F5BEA003212B0 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		2F2520BF231F5BF6003212B0 /* libresolv.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.9.tbd; path = usr/lib/libresolv.9.tbd; sourceTree = SDKROOT; };
 		2F2520C1231F5BFF003212B0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
@@ -83,18 +111,6 @@
 		2F2520D7231F5C54003212B0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2F2520D9231F5C5B003212B0 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		2F2520DB231F5C63003212B0 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
-		2F2520DD231F5DAE003212B0 /* BUAdSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BUAdSDK.framework; sourceTree = "<group>"; };
-		5409F01623753D8200776571 /* libMSAdSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMSAdSDK.a; sourceTree = "<group>"; };
-		5409F01923753D8200776571 /* MSAdModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSAdModel.h; sourceTree = "<group>"; };
-		5409F01A23753D8200776571 /* MSRewardVideoAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSRewardVideoAd.h; sourceTree = "<group>"; };
-		5409F01B23753D8200776571 /* MRApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRApplication.h; sourceTree = "<group>"; };
-		5409F01C23753D8200776571 /* MSSDKDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSDKDefines.h; sourceTree = "<group>"; };
-		5409F01D23753D8200776571 /* MSSplashAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSplashAd.h; sourceTree = "<group>"; };
-		5409F01E23753D8200776571 /* MSNativeAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNativeAdView.h; sourceTree = "<group>"; };
-		5409F01F23753D8200776571 /* MSInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSInterstitial.h; sourceTree = "<group>"; };
-		5409F02023753D8200776571 /* MSBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBannerView.h; sourceTree = "<group>"; };
-		5409F02123753D8200776571 /* MSSDKModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSDKModel.h; sourceTree = "<group>"; };
-		5409F02223753D8200776571 /* MSAdSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSAdSDK.h; sourceTree = "<group>"; };
 		548F3EC0231F47A4003CE914 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		548F3EC4231F47A4003CE914 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		548F3EC9231F47A4003CE914 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -109,22 +125,6 @@
 		548F3EE4231F47A5003CE914 /* DemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		548F3EE8231F47A5003CE914 /* DemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoUITests.m; sourceTree = "<group>"; };
 		548F3EEA231F47A5003CE914 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		548F3FB7231F4AAA003CE914 /* BUAdSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = BUAdSDK.bundle; sourceTree = "<group>"; };
-		548F3FBA231F4AAA003CE914 /* BannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BannerViewController.h; sourceTree = "<group>"; };
-		548F3FBB231F4AAA003CE914 /* BannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BannerViewController.m; sourceTree = "<group>"; };
-		548F3FBC231F4AAA003CE914 /* BannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BannerViewController.xib; sourceTree = "<group>"; };
-		548F3FBE231F4AAA003CE914 /* InterstitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterstitialViewController.h; sourceTree = "<group>"; };
-		548F3FBF231F4AAA003CE914 /* InterstitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterstitialViewController.m; sourceTree = "<group>"; };
-		548F3FC0231F4AAA003CE914 /* InterstitialViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InterstitialViewController.xib; sourceTree = "<group>"; };
-		548F3FC2231F4AAA003CE914 /* NativeExpressAdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeExpressAdViewController.h; sourceTree = "<group>"; };
-		548F3FC3231F4AAA003CE914 /* NativeExpressAdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NativeExpressAdViewController.m; sourceTree = "<group>"; };
-		548F3FC4231F4AAA003CE914 /* NativeExpressAdViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NativeExpressAdViewController.xib; sourceTree = "<group>"; };
-		548F3FC6231F4AAA003CE914 /* RewardVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RewardVideoViewController.h; sourceTree = "<group>"; };
-		548F3FC7231F4AAA003CE914 /* RewardVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RewardVideoViewController.m; sourceTree = "<group>"; };
-		548F3FC8231F4AAA003CE914 /* RewardVideoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RewardVideoViewController.xib; sourceTree = "<group>"; };
-		548F3FCA231F4AAA003CE914 /* SplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
-		548F3FCB231F4AAA003CE914 /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
-		548F3FCC231F4AAA003CE914 /* SplashViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SplashViewController.xib; sourceTree = "<group>"; };
 		548F3FCD231F4AAA003CE914 /* MSAdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSAdViewController.h; sourceTree = "<group>"; };
 		548F3FCE231F4AAA003CE914 /* MSAdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSAdViewController.m; sourceTree = "<group>"; };
 		548F3FCF231F4AAA003CE914 /* MSNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNavigationController.h; sourceTree = "<group>"; };
@@ -149,15 +149,15 @@
 				2F2520D0231F5C39003212B0 /* CoreLocation.framework in Frameworks */,
 				2F2520CE231F5C32003212B0 /* QuartzCore.framework in Frameworks */,
 				2F2520CC231F5C2A003212B0 /* SystemConfiguration.framework in Frameworks */,
+				08CD71E42386878600032548 /* BUAdSDK.framework in Frameworks */,
 				2F2520CA231F5C22003212B0 /* CoreGraphics.framework in Frameworks */,
 				2F2520C8231F5C16003212B0 /* UIKit.framework in Frameworks */,
 				2F2520C6231F5C10003212B0 /* Foundation.framework in Frameworks */,
+				08CD71E52386878600032548 /* libMSAdSDK.a in Frameworks */,
 				2F2520C4231F5C08003212B0 /* Photos.framework in Frameworks */,
-				5409F02323753D8200776571 /* libMSAdSDK.a in Frameworks */,
 				2F2520C2231F5BFF003212B0 /* CoreMotion.framework in Frameworks */,
 				2F2520C0231F5BF6003212B0 /* libresolv.9.tbd in Frameworks */,
 				2F2520BE231F5BEA003212B0 /* libc++.tbd in Frameworks */,
-				2F2520DE231F5DAE003212B0 /* BUAdSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,6 +178,112 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		08CD71D32386878600032548 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				08CD71D42386878600032548 /* BUAdSDK.framework */,
+				08CD71D52386878600032548 /* MS */,
+				08CD71E32386878600032548 /* BUAdSDK.bundle */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		08CD71D52386878600032548 /* MS */ = {
+			isa = PBXGroup;
+			children = (
+				08CD71D62386878600032548 /* include */,
+				08CD71E22386878600032548 /* libMSAdSDK.a */,
+			);
+			path = MS;
+			sourceTree = "<group>";
+		};
+		08CD71D62386878600032548 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				08CD71D72386878600032548 /* MSAdSDK */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		08CD71D72386878600032548 /* MSAdSDK */ = {
+			isa = PBXGroup;
+			children = (
+				08CD71D82386878600032548 /* MSAdModel.h */,
+				08CD71D92386878600032548 /* MSRewardVideoAd.h */,
+				08CD71DA2386878600032548 /* MRApplication.h */,
+				08CD71DB2386878600032548 /* MSSDKDefines.h */,
+				08CD71DC2386878600032548 /* MSSplashAd.h */,
+				08CD71DD2386878600032548 /* MSNativeAdView.h */,
+				08CD71DE2386878600032548 /* MSInterstitial.h */,
+				08CD71DF2386878600032548 /* MSBannerView.h */,
+				08CD71E02386878600032548 /* MSSDKModel.h */,
+				08CD71E12386878600032548 /* MSAdSDK.h */,
+			);
+			path = MSAdSDK;
+			sourceTree = "<group>";
+		};
+		08CD71E7238688B000032548 /* MSAds */ = {
+			isa = PBXGroup;
+			children = (
+				08CD71E8238688B000032548 /* MSNativeExpressAd */,
+				08CD71EC238688B000032548 /* MSSplashAd */,
+				08CD71F0238688B000032548 /* MSRewardVideoAd */,
+				08CD71F4238688B000032548 /* MSInterstitialAd */,
+				08CD71F8238688B000032548 /* MSBannerAd */,
+			);
+			path = MSAds;
+			sourceTree = "<group>";
+		};
+		08CD71E8238688B000032548 /* MSNativeExpressAd */ = {
+			isa = PBXGroup;
+			children = (
+				08CD71E9238688B000032548 /* NativeExpressAdViewController.h */,
+				08CD71EA238688B000032548 /* NativeExpressAdViewController.xib */,
+				08CD71EB238688B000032548 /* NativeExpressAdViewController.m */,
+			);
+			path = MSNativeExpressAd;
+			sourceTree = "<group>";
+		};
+		08CD71EC238688B000032548 /* MSSplashAd */ = {
+			isa = PBXGroup;
+			children = (
+				08CD71ED238688B000032548 /* SplashViewController.h */,
+				08CD71EE238688B000032548 /* SplashViewController.m */,
+				08CD71EF238688B000032548 /* SplashViewController.xib */,
+			);
+			path = MSSplashAd;
+			sourceTree = "<group>";
+		};
+		08CD71F0238688B000032548 /* MSRewardVideoAd */ = {
+			isa = PBXGroup;
+			children = (
+				08CD71F1238688B000032548 /* RewardVideoViewController.m */,
+				08CD71F2238688B000032548 /* RewardVideoViewController.xib */,
+				08CD71F3238688B000032548 /* RewardVideoViewController.h */,
+			);
+			path = MSRewardVideoAd;
+			sourceTree = "<group>";
+		};
+		08CD71F4238688B000032548 /* MSInterstitialAd */ = {
+			isa = PBXGroup;
+			children = (
+				08CD71F5238688B000032548 /* InterstitialViewController.h */,
+				08CD71F6238688B000032548 /* InterstitialViewController.xib */,
+				08CD71F7238688B000032548 /* InterstitialViewController.m */,
+			);
+			path = MSInterstitialAd;
+			sourceTree = "<group>";
+		};
+		08CD71F8238688B000032548 /* MSBannerAd */ = {
+			isa = PBXGroup;
+			children = (
+				08CD71F9238688B000032548 /* BannerViewController.xib */,
+				08CD71FA238688B000032548 /* BannerViewController.m */,
+				08CD71FB238688B000032548 /* BannerViewController.h */,
+			);
+			path = MSBannerAd;
+			sourceTree = "<group>";
+		};
 		2F2520BB231F5B35003212B0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -199,40 +305,6 @@
 				2F2520BD231F5BEA003212B0 /* libc++.tbd */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		5409F01523753D5A00776571 /* MS */ = {
-			isa = PBXGroup;
-			children = (
-				5409F01723753D8200776571 /* include */,
-				5409F01623753D8200776571 /* libMSAdSDK.a */,
-			);
-			path = MS;
-			sourceTree = "<group>";
-		};
-		5409F01723753D8200776571 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				5409F01823753D8200776571 /* MSAdSDK */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		5409F01823753D8200776571 /* MSAdSDK */ = {
-			isa = PBXGroup;
-			children = (
-				5409F01923753D8200776571 /* MSAdModel.h */,
-				5409F01A23753D8200776571 /* MSRewardVideoAd.h */,
-				5409F01B23753D8200776571 /* MRApplication.h */,
-				5409F01C23753D8200776571 /* MSSDKDefines.h */,
-				5409F01D23753D8200776571 /* MSSplashAd.h */,
-				5409F01E23753D8200776571 /* MSNativeAdView.h */,
-				5409F01F23753D8200776571 /* MSInterstitial.h */,
-				5409F02023753D8200776571 /* MSBannerView.h */,
-				5409F02123753D8200776571 /* MSSDKModel.h */,
-				5409F02223753D8200776571 /* MSAdSDK.h */,
-			);
-			path = MSAdSDK;
 			sourceTree = "<group>";
 		};
 		548F3EB7231F47A4003CE914 = {
@@ -259,8 +331,8 @@
 		548F3EC2231F47A4003CE914 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
-				548F3FB6231F4AAA003CE914 /* lib */,
-				548F3FB8231F4AAA003CE914 /* MSAds */,
+				08CD71D32386878600032548 /* lib */,
+				08CD71E7238688B000032548 /* MSAds */,
 				548F3FCD231F4AAA003CE914 /* MSAdViewController.h */,
 				548F3FCE231F4AAA003CE914 /* MSAdViewController.m */,
 				548F3FCF231F4AAA003CE914 /* MSNavigationController.h */,
@@ -303,78 +375,6 @@
 				548F3EEA231F47A5003CE914 /* Info.plist */,
 			);
 			path = DemoUITests;
-			sourceTree = "<group>";
-		};
-		548F3FB6231F4AAA003CE914 /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				5409F01523753D5A00776571 /* MS */,
-				2F2520DD231F5DAE003212B0 /* BUAdSDK.framework */,
-				548F3FB7231F4AAA003CE914 /* BUAdSDK.bundle */,
-			);
-			path = lib;
-			sourceTree = "<group>";
-		};
-		548F3FB8231F4AAA003CE914 /* MSAds */ = {
-			isa = PBXGroup;
-			children = (
-				548F3FB9231F4AAA003CE914 /* MSBannerAd */,
-				548F3FBD231F4AAA003CE914 /* MSInterstitialAd */,
-				548F3FC1231F4AAA003CE914 /* MSNativeExpressAd */,
-				548F3FC5231F4AAA003CE914 /* MSRewardVideoAd */,
-				548F3FC9231F4AAA003CE914 /* MSSplashAd */,
-			);
-			path = MSAds;
-			sourceTree = "<group>";
-		};
-		548F3FB9231F4AAA003CE914 /* MSBannerAd */ = {
-			isa = PBXGroup;
-			children = (
-				548F3FBA231F4AAA003CE914 /* BannerViewController.h */,
-				548F3FBB231F4AAA003CE914 /* BannerViewController.m */,
-				548F3FBC231F4AAA003CE914 /* BannerViewController.xib */,
-			);
-			path = MSBannerAd;
-			sourceTree = "<group>";
-		};
-		548F3FBD231F4AAA003CE914 /* MSInterstitialAd */ = {
-			isa = PBXGroup;
-			children = (
-				548F3FBE231F4AAA003CE914 /* InterstitialViewController.h */,
-				548F3FBF231F4AAA003CE914 /* InterstitialViewController.m */,
-				548F3FC0231F4AAA003CE914 /* InterstitialViewController.xib */,
-			);
-			path = MSInterstitialAd;
-			sourceTree = "<group>";
-		};
-		548F3FC1231F4AAA003CE914 /* MSNativeExpressAd */ = {
-			isa = PBXGroup;
-			children = (
-				548F3FC2231F4AAA003CE914 /* NativeExpressAdViewController.h */,
-				548F3FC3231F4AAA003CE914 /* NativeExpressAdViewController.m */,
-				548F3FC4231F4AAA003CE914 /* NativeExpressAdViewController.xib */,
-			);
-			path = MSNativeExpressAd;
-			sourceTree = "<group>";
-		};
-		548F3FC5231F4AAA003CE914 /* MSRewardVideoAd */ = {
-			isa = PBXGroup;
-			children = (
-				548F3FC6231F4AAA003CE914 /* RewardVideoViewController.h */,
-				548F3FC7231F4AAA003CE914 /* RewardVideoViewController.m */,
-				548F3FC8231F4AAA003CE914 /* RewardVideoViewController.xib */,
-			);
-			path = MSRewardVideoAd;
-			sourceTree = "<group>";
-		};
-		548F3FC9231F4AAA003CE914 /* MSSplashAd */ = {
-			isa = PBXGroup;
-			children = (
-				548F3FCA231F4AAA003CE914 /* SplashViewController.h */,
-				548F3FCB231F4AAA003CE914 /* SplashViewController.m */,
-				548F3FCC231F4AAA003CE914 /* SplashViewController.xib */,
-			);
-			path = MSSplashAd;
 			sourceTree = "<group>";
 		};
 		548F3FD1231F4AAA003CE914 /* MSSampleAdTypes */ = {
@@ -494,15 +494,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				548F3FDA231F4AAA003CE914 /* NativeExpressAdViewController.xib in Resources */,
-				548F3FDE231F4AAA003CE914 /* SplashViewController.xib in Resources */,
-				548F3FDC231F4AAA003CE914 /* RewardVideoViewController.xib in Resources */,
-				548F3FD4231F4AAA003CE914 /* BUAdSDK.bundle in Resources */,
+				08CD71FC238688B100032548 /* NativeExpressAdViewController.xib in Resources */,
+				08CD71FF238688B100032548 /* SplashViewController.xib in Resources */,
+				08CD7202238688B100032548 /* InterstitialViewController.xib in Resources */,
+				08CD71E62386878600032548 /* BUAdSDK.bundle in Resources */,
 				548F3ED3231F47A4003CE914 /* LaunchScreen.storyboard in Resources */,
-				548F3FD8231F4AAA003CE914 /* InterstitialViewController.xib in Resources */,
-				548F3FD6231F4AAA003CE914 /* BannerViewController.xib in Resources */,
+				08CD7204238688B100032548 /* BannerViewController.xib in Resources */,
 				548F3ED0231F47A4003CE914 /* Assets.xcassets in Resources */,
 				548F3ECE231F47A4003CE914 /* Main.storyboard in Resources */,
+				08CD7201238688B100032548 /* RewardVideoViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -529,13 +529,13 @@
 			files = (
 				548F3FE4231F4AFD003CE914 /* AppDelegate.m in Sources */,
 				548F3ECB231F47A4003CE914 /* ViewController.m in Sources */,
+				08CD7203238688B100032548 /* InterstitialViewController.m in Sources */,
 				548F3FDF231F4AAA003CE914 /* MSAdViewController.m in Sources */,
-				548F3FD7231F4AAA003CE914 /* InterstitialViewController.m in Sources */,
-				548F3FDD231F4AAA003CE914 /* SplashViewController.m in Sources */,
+				08CD71FE238688B100032548 /* SplashViewController.m in Sources */,
+				08CD71FD238688B100032548 /* NativeExpressAdViewController.m in Sources */,
+				08CD7200238688B100032548 /* RewardVideoViewController.m in Sources */,
 				548F3FE0231F4AAA003CE914 /* MSNavigationController.m in Sources */,
-				548F3FD9231F4AAA003CE914 /* NativeExpressAdViewController.m in Sources */,
-				548F3FDB231F4AAA003CE914 /* RewardVideoViewController.m in Sources */,
-				548F3FD5231F4AAA003CE914 /* BannerViewController.m in Sources */,
+				08CD7205238688B100032548 /* BannerViewController.m in Sources */,
 				548F3EC5231F47A4003CE914 /* main.m in Sources */,
 				548F3FE1231F4AAA003CE914 /* MSAdViewController+Sample.m in Sources */,
 			);

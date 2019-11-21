@@ -7,7 +7,7 @@
 //
 
 #import "BannerViewController.h"
-#import "MSAdSDK/MSBannerView.h"
+#import "MSBannerView.h"
 
 @interface BannerViewController() <MSBannerViewDelegate>
 

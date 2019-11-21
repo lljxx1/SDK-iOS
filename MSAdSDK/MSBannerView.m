@@ -165,18 +165,18 @@
                     
                     //数据曝光即是数据加载完成后上报
                     if(model&&model.monitorUrl.count>0){
-                        NSString *monitorUrl = model.monitorUrl[0];
-                        [[MSSDKNetSession wsqflyNetWorkingShare]get:monitorUrl param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
-                            
-                        } requestHead:^(id response) {
-                            
-                        } faile:^(NSError *error) {
-                            
-                        }];
+//                        NSString *monitorUrl = model.monitorUrl[0];
+//                        [[MSSDKNetSession wsqflyNetWorkingShare]get:monitorUrl param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+//                            
+//                        } requestHead:^(id response) {
+//                            
+//                        } faile:^(NSError *error) {
+//                            
+//                        }];
                     }
                     
                     //回调或者说是通知主线程刷新，
-                    ws.advertiseView = [[SplashScreenView alloc] initWithFrame:ws.frame adModel:model adType:1];
+                    ws.advertiseView = [[SplashScreenView alloc] initWithFrame:ws.frame adModel:model adType:1 ];
                     ws.advertiseView.adModel = model;
                     ws.advertiseView.delegate = ws;
                     [ws.advertiseView  showSplashScreenWithTime:0 adType:1];

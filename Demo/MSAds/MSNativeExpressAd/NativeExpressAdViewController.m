@@ -7,7 +7,7 @@
 //
 
 #import "NativeExpressAdViewController.h"
-#import "MSAdSDK/MSNativeAdView.h"
+#import "MSNativeAdView.h"
 
 @interface NativeExpressAdViewController ()<MSNativeAdDelegate,UITableViewDelegate,UITableViewDataSource>
 
@@ -52,6 +52,17 @@
     [self.heightSlider addTarget:self action:@selector(sliderPositionHChanged) forControlEvents:UIControlEventValueChanged];
     [self.adCountSlider addTarget:self action:@selector(sliderPositionCountChanged) forControlEvents:UIControlEventValueChanged];
     
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"nativeexpresscell"];
+    
+    
+    [self refreshButton:nil];
+
+}
+
+- (IBAction)refreshButton:(id)sender {
+    NSString *placementId = self.placementIdTextField.text.length > 0? self.placementIdTextField.text: self.placementIdTextField.placeholder;
     MSWS(ws);
     //请求信息流数据
     [MSNativeAdView requestMSAdData:^(MSAdModel* adModel){
@@ -61,24 +72,16 @@
         
         //主线程刷新页面
         dispatch_async(dispatch_get_main_queue(), ^{
-            ws.tableView.delegate = ws;
-            ws.tableView.dataSource = ws;
-            [ws.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"nativeexpresscell"];
-            [ws refreshButton:nil];
+            [ws.tableView reloadData];
         });
     }];
-    
-
-}
-
-- (IBAction)refreshButton:(id)sender {
-    NSString *placementId = self.placementIdTextField.text.length > 0? self.placementIdTextField.text: self.placementIdTextField.placeholder;
 //    self.nativeExpressAd = [[GDTNativeExpressAd alloc] initWithAppId:kGDTMobSDKAppId
 //                                                         placementId:placementId
 //                                                              adSize:CGSizeMake(self.widthSlider.value, self.heightSlider.value)];
 //    self.nativeExpressAd.delegate = self;
 //    [self.nativeExpressAd loadAd:(NSInteger)self.adCountSlider.value];
 }
+
 
 - (void)sliderPositionWChanged {
     self.widthLabel.text = [NSString stringWithFormat:@"宽：%.0f",self.widthSlider.value];

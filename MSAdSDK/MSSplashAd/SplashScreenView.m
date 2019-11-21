@@ -34,7 +34,7 @@
 @property (nonatomic, assign) NSInteger msAdType;
 
 @property (nonatomic, strong) UIView* bottomView;
-
+@property (nonatomic, copy) void(^didShowAd)(void);
 
 @end
  
@@ -42,14 +42,26 @@
 @implementation SplashScreenView
 
 //开屏广告-半屏模式
-- (instancetype)initWithFrame:(CGRect)frame adModel:(MSAdModel *)adModel adType:(NSInteger)adType bottomView:(UIView*)bottomView{
+- (instancetype)initWithFrame:(CGRect)frame adModel:(MSAdModel *)adModel adType:(NSInteger)adType bottomView:(UIView*)bottomView didShowAd:(void(^)(void))didShowAd{
     if (self = [super initWithFrame:frame]) {
+        self.didShowAd = didShowAd;
         self.adModel = adModel;
         self.adType = adType;
         self.bottomView = bottomView;
         [self setCustomView:adType];
        }
        return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame adModel:(MSAdModel*)adModel adType:(NSInteger)adType didShowAd:(void(^)(void))didShowAd
+{
+    if (self = [super initWithFrame:frame]) {
+        self.didShowAd = didShowAd;
+        self.adModel = adModel;
+        self.adType = adType;
+        [self setCustomView:adType];
+    }
+    return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame adModel:(MSAdModel*)adModel adType:(NSInteger)adType
@@ -66,7 +78,7 @@
 - (void)setCustomView:(NSInteger)adType{
     _bgView = [UIView new];
     _bgView.frame = [UIScreen mainScreen].bounds;
-    _bgView.backgroundColor = [UIColor blackColor];
+    _bgView.backgroundColor = [UIColor whiteColor];
     _bgView.alpha = 0.5;
     
     // 1.广告图片
@@ -272,6 +284,7 @@
     }
     if ([ws.adModel.dUrl count]>0) {
         dUrl = ws.adModel.dUrl[0];
+        self.imgLinkUrl = dUrl;
     }
     
     //图片
@@ -301,7 +314,9 @@
                 window.hidden = NO;
                 [window addSubview:ws.bgView];
                 [window addSubview:ws];
-                
+                if (ws.didShowAd) {
+                    ws.didShowAd();
+                }
             }
             else  if (adType==1) {//banner
                 

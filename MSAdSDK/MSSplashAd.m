@@ -145,7 +145,7 @@
         }else{
             [splash loadAdAndShowInWindow:self.window];
         }
-        
+        [self.backgroundView removeFromSuperview];
         self.splash = splash;
     }
 }
@@ -185,6 +185,7 @@
     [self.splashView loadAdData];
     [self.window.rootViewController.view addSubview:self.splashView];
     self.splashView.rootViewController = self.window.rootViewController;
+    [self.backgroundView removeFromSuperview];
 }
 
 - (void)tapped:(UITapGestureRecognizer*)tap{
@@ -219,9 +220,7 @@
         }
     } requestHead:^(id response) {
         NSLog(@"%@",response);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [ws.backgroundView removeFromSuperview];
-        });
+        
         //我们假设一个场景，广告的调用顺序是：1. 广点通；2.穿山甲；3.打底广告；
         if (model) {
             if(model.sdk.count > 0){
@@ -244,24 +243,29 @@
                     //数据曝光即是数据加载完成后上报
                     if(model&&model.monitorUrl.count>0){
                         //                        NSString *monitorUrl = model.monitorUrl[0];
-                        for (NSString *monitorUrl in model.monitorUrl) {
-                            [[MSSDKNetSession wsqflyNetWorkingShare]get:monitorUrl param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
-                                
-                            } requestHead:^(id response) {
-                                
-                            } faile:^(NSError *error) {
-                                
-                            }];
-                        }
+//                        for (NSString *monitorUrl in model.monitorUrl) {
+//                            [[MSSDKNetSession wsqflyNetWorkingShare]get:monitorUrl param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+//
+//                            } requestHead:^(id response) {
+//
+//                            } faile:^(NSError *error) {
+//
+//                            }];
+//                        }
                     }
                     if (ws.needCustom) {
                         ws.customAdView.frame = CGRectMake(0, 0, ws.window.bounds.size.width, ws.window.bounds.size.height*0.25);
                         if (ws.drawCustomView) {
                             ws.drawCustomView(ws.customAdView);
                         }
-                        ws.advertiseView = [[SplashScreenView alloc] initWithFrame:[UIScreen mainScreen].bounds adModel:model adType:0 bottomView:ws.customAdView];
+                    
+                        ws.advertiseView = [[SplashScreenView alloc] initWithFrame:[UIScreen mainScreen].bounds adModel:model adType:0 bottomView:ws.customAdView didShowAd:^{
+                            [ws.backgroundView removeFromSuperview];
+                        }];
                     }else{
-                        ws.advertiseView = [[SplashScreenView alloc] initWithFrame:[UIScreen mainScreen].bounds adModel:model adType:0];
+                        ws.advertiseView = [[SplashScreenView alloc] initWithFrame:[UIScreen mainScreen].bounds adModel:model adType:0 didShowAd:^{
+                            [ws.backgroundView removeFromSuperview];
+                        }];
                     }
                     ws.advertiseView.adModel = model;
                     ws.advertiseView.delegate = ws;
@@ -269,6 +273,7 @@
                 });
             }
         }
+
     } faile:^(NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [ws.backgroundView removeFromSuperview];

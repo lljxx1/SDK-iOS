@@ -86,13 +86,13 @@
                         //数据曝光即是数据加载完成后上报
                         if(model&&model.monitorUrl.count>0){
                             NSString *monitorUrl = model.monitorUrl[0];
-                            [[MSSDKNetSession wsqflyNetWorkingShare]get:monitorUrl param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
-                                
-                            } requestHead:^(id response) {
-                                
-                            } faile:^(NSError *error) {
-                                
-                            }];
+//                            [[MSSDKNetSession wsqflyNetWorkingShare]get:monitorUrl param:nil maskState:WsqflyNetSessionMaskStateNone backData:WsqflyNetSessionResponseTypeJSON success:^(id response) {
+//                                
+//                            } requestHead:^(id response) {
+//                                
+//                            } faile:^(NSError *error) {
+//                                
+//                            }];
                         }
                         
                         //回调或者说是通知主线程刷新，

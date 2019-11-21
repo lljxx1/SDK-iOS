@@ -7,7 +7,7 @@
 //
 
 #import "InterstitialViewController.h"
-#import "MSAdSDK/MSInterstitial.h"
+#import "MSInterstitial.h"
 
 @interface InterstitialViewController() <MSInterstitialDelegate>
 

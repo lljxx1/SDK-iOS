@@ -7,7 +7,7 @@
 //
 
 #import "RewardVideoViewController.h"
-#import "MSAdSDK/MSRewardVideoAd.h"
+#import "MSRewardVideoAd.h"
 
 @interface RewardVideoViewController () <MSRewardedVideoAdDelegate>
 
@@ -24,6 +24,7 @@
 @implementation RewardVideoViewController
 
 - (void)viewDidLoad {
+    self.supportOrientation = UIInterfaceOrientationPortrait;
     [super viewDidLoad];
 }
 
@@ -47,18 +48,11 @@
         self.rewardVideoAd = [[MSRewardVideoAd alloc] initWithCurController:self];
     }
     self.rewardVideoAd.delegate = self;
+    //加载数据
+    [self.rewardVideoAd loadData];
 }
 
 - (IBAction)playVideo:(UIButton *)sender {
-    
-//    if (self.rewardVideoAd.expiredTimestamp <= [[NSDate date] timeIntervalSince1970]) {
-//        self.statusLabel.text = @"广告已过期，请重新拉取";
-//        return;
-//    }
-//    if (!self.rewardVideoAd.isAdValid) {
-//        self.statusLabel.text = @"广告失效，请重新拉取";
-//        return;
-//    }
     [self.rewardVideoAd showAd];
 }
 
